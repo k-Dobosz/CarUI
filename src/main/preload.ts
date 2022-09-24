@@ -1,6 +1,19 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'ipc-example';
+export type Channels =
+  | 'carplay-click'
+  | 'carplay-status-request'
+  | 'carplay-fps-request'
+  | 'carplay-reload-request'
+  | 'carplay-quit-request'
+  | 'carplay-plugged'
+  | 'carplay-unplugged'
+  | 'system-shutdown'
+  | 'open-youtube'
+  | 'open-netflix'
+  | 'wifi-networks-request'
+  | 'wifi-networks'
+  | 'wifi-connect';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

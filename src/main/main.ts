@@ -9,11 +9,43 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  shell,
+  ipcMain,
+  BrowserView,
+  globalShortcut,
+} from 'electron';
 import { autoUpdater } from 'electron-updater';
+import Carplay from 'node-carplay';
 import log from 'electron-log';
-import MenuBuilder from './menu';
+import WebSocket from 'ws';
+import { Readable } from 'stream';
+import wifi from 'node-wifi';
 import { resolveHtmlPath } from './util';
+
+const { exec } = require('node:child_process');
+const keys = require('./bindings.json');
+
+const mp4Reader = new Readable({
+  read(size) {},
+});
+
+const wss = new WebSocket.Server({ port: 3001, perMessageDeflate: false });
+
+wss.on('connection', (ws) => {
+  mp4Reader.on('data', (data) => {
+    ws.send(data);
+  });
+
+  ws.on('error', () => console.log('WebSocket error'));
+  ws.on('close', () => console.log('WebSocket close'));
+});
+
+wifi.init({
+  iface: null,
+});
 
 class AppUpdater {
   constructor() {
@@ -25,10 +57,28 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+ipcMain.on('open-youtube', async (event, arg) => {
+  const view = new BrowserView();
+  mainWindow?.setBrowserView(view);
+  view.setBounds({ x: 0, y: 0, width: 1024, height: 600 });
+  view.webContents.loadURL('https://youtube.com/', {
+    userAgent:
+      'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.71 Mobile Safari/537.36',
+  });
+});
+
+ipcMain.on('open-netflix', async (event, arg) => {
+  const view = new BrowserView();
+  mainWindow?.setBrowserView(view);
+  view.setBounds({ x: 0, y: 0, width: 1024, height: 600 });
+  view.webContents.loadURL('https://netflix.com/', {
+    userAgent:
+      'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.71 Mobile Safari/537.36',
+  });
+});
+
+ipcMain.on('close-browserview', async (event, arg) => {
+  mainWindow?.setBrowserView(null);
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -62,8 +112,8 @@ const createWindow = async () => {
   }
 
   const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
+    ? path.join(process.resourcesPath, 'public')
+    : path.join(__dirname, '../../public');
 
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
@@ -71,17 +121,22 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1378,
+    height: 768,
     icon: getAssetPath('icon.png'),
+    backgroundColor: '#000000',
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
+    kiosk: app.isPackaged,
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+  if (process.platform !== 'darwin')
+    mainWindow.webContents.insertCSS('* { cursor: none !important; }');
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -98,9 +153,6 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
     shell.openExternal(edata.url);
@@ -108,8 +160,96 @@ const createWindow = async () => {
   });
 
   // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
+
+  const config = {
+    dpi: 240,
+    nightMode: 0,
+    hand: 0,
+    boxName: 'nodePlay',
+    width: 1368,
+    height: 768,
+    fps: 30,
+  };
+
+  const carplay = new Carplay(config, mp4Reader);
+
+  carplay.on('status', (data: { status: any }) => {
+    if (data.status) {
+      mainWindow?.webContents.send('carplay-plugged');
+    } else {
+      mainWindow?.webContents.send('carplay-unplugged');
+    }
+    console.log('data received');
+  });
+
+  carplay.on('quit', () => {
+    mainWindow?.webContents.send('carplay-quit-request');
+  });
+
+  ipcMain.on('carplay-click', (_, args) => {
+    const data = args[0];
+    carplay.sendTouch(data.type, data.x, data.y);
+    console.log(data.type, data.x, data.y);
+  });
+
+  ipcMain.on('carplay-fps-request', (e) => {
+    e.returnValue = 30;
+  });
+
+  ipcMain.on('carplay-reload-request', () => {
+    app.relaunch();
+    app.quit();
+  });
+
+  ipcMain.on('system-shutdown', () => {
+    if (isDebug) {
+      app.exit(0);
+      return;
+    }
+
+    exec('sudo shutdown now', (error: Error) => {
+      if (error) {
+        console.error(error);
+      }
+    });
+  });
+
+  ipcMain.on('wifi-networks-request', () => {
+    wifi.scan((error, networks) => {
+      if (error) {
+        console.log(error);
+        mainWindow?.webContents.send('wifi-networks', []);
+      } else {
+        mainWindow?.webContents.send('wifi-networks', networks);
+      }
+    });
+  });
+
+  ipcMain.on('wifi-connect', (_, args: any) => {
+    const { ssid, password } = args[0];
+
+    wifi.connect({ ssid, password }, () => {
+      console.log(`Connected to ${ssid}`);
+    });
+  });
+
+  globalShortcut.register('q', () => {
+    mainWindow?.setBrowserView(null);
+  });
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const [key, value] of Object.entries(keys)) {
+    globalShortcut.register(key, () => {
+      carplay.sendKey(value);
+
+      if (value === 'selectDown') {
+        setTimeout(() => {
+          carplay.sendKey('selectUp');
+        }, 200);
+      }
+    });
+  }
 };
 
 /**

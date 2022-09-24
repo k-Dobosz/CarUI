@@ -44,6 +44,9 @@ const configuration: webpack.Configuration = {
   },
 
   plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
     }),

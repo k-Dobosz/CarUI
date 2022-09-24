@@ -1,0 +1,31 @@
+nav {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100px;
+    width: 100%;
+    border-top: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+a, button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.25);
+    transition: background-color .2s;
+}
+
+a:hover, button:hover{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+button {
+    color: #fff;
+    border: none;
+}
