@@ -1,0 +1,78 @@
+  #music {
+    display: flex;
+    flex-direction: column;
+    height: 82.5vh;
+    width: 100vw;
+  }
+  
+  #artwork {
+    padding: 2rem;
+    padding-right: 0;
+  }
+
+  #artwork img {
+    min-width: 250px;
+    min-height: 250px;
+    height: 300px;
+    width: 300px
+  }
+  
+  #music-info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 80%;
+  }
+  
+  #info {
+    width: 100%;
+    padding: 2rem;
+  }
+  
+  h1 {
+    padding-bottom: 1rem;
+  }
+  
+  h2 {
+    padding-bottom: 1rem;
+  
+  }
+  
+  #equalizer {
+    width: 100%;
+    height: 75px;
+  }
+  
+  #timeline {
+    width: 100%;
+    height: 4px;
+    background-color: #ddd;
+    -webkit-appearance: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #timeline::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 0px;
+    width: 0px;
+    box-shadow: -100vw 0 0 100vw dodgerblue;
+
+  }
+  
+  #time {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  #music-control {
+    width: 100%;
+    height: 20%;
+  }
+  
+  #controls {
+    display: flex;
+    flex-direction: row;
+  }
