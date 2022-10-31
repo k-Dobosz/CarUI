@@ -8,6 +8,7 @@ import {
 import './music.css';
 import { useEffect, useRef, useState } from 'react';
 import Visualization from './visualization';
+import img from './artwork.png';
 
 export default function Music() {
   const audioRef = useRef(null);
@@ -34,7 +35,7 @@ export default function Music() {
     <div id="music">
       <section id="music-info">
         <section id="artwork">
-          <img src="" alt="Artwork" />
+          <img src={img} alt="Artwork" />
         </section>
         <section id="info">
           <h2>Artist name</h2>
@@ -53,10 +54,11 @@ export default function Music() {
             <span id="durationTime">{duration}</span>
           </div>
           <audio
-            src=""
+            src="audio.mp3"
             ref={audioRef}
             onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
             onLoadedData={(e) => setDuration(e.target.duration)}
+            controls
           />
           <Visualization audioRef={audioRef} />
         </section>
