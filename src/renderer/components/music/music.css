@@ -26,6 +26,12 @@
   
   #info {
     width: 100%;
+    height: 100%;
+  }
+
+  #info-wrapper {
+    width: calc(100% - 4em);
+    height: calc(100% - 4em);
     padding: 2rem;
   }
   
@@ -38,9 +44,10 @@
   
   }
   
-  #equalizer {
+  canvas {
     width: 100%;
-    height: 75px;
+    height: auto;
+    max-height: 175px;
   }
   
   #timeline {

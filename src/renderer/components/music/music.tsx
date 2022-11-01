@@ -13,7 +13,7 @@ import img from './artwork.png';
 export default function Music() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState('');
   const [demandTime, setDemandTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -25,6 +25,13 @@ export default function Music() {
       audioRef.current?.play();
       setIsPlaying(true);
     }
+  };
+
+  const formatTime = (time: number) => {
+    const dmin = Math.floor(time / 60);
+    const dsec = Math.floor(time) - dmin * 60;
+
+    return `${(dmin < 10 ? '0' : '') + dmin}:${(dsec < 10 ? '0' : '') + dsec}`;
   };
 
   useEffect(() => {
@@ -40,28 +47,32 @@ export default function Music() {
           <img src={img} alt="Artwork" />
         </section>
         <section id="info">
-          <h2>Artist name</h2>
-          <h1>Song name</h1>
-          <input
-            type="range"
-            name=""
-            id="timeline"
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={(e) => setDemandTime(e.target.value)}
-          />
-          <div id="time">
-            <span id="currentTime">{currentTime}</span>{' '}
-            <span id="durationTime">{duration}</span>
+          <div id="info-wrapper">
+            <h2>Artist name</h2>
+            <h1>Song name</h1>
+            <input
+              type="range"
+              name=""
+              id="timeline"
+              min="0"
+              max={duration}
+              value={audioRef.current?.currentTime}
+              onChange={(e) => setDemandTime(e.target.value)}
+            />
+            <div id="time">
+              <span id="currentTime">{currentTime}</span>{' '}
+              <span id="durationTime">{formatTime(duration)}</span>
+            </div>
+            <audio
+              src="audio.mp3"
+              ref={audioRef}
+              onTimeUpdate={(e) =>
+                setCurrentTime(formatTime(e.target.currentTime))
+              }
+              onLoadedData={(e) => setDuration(e.target.duration)}
+            />
+            <Visualization audioRef={audioRef} />
           </div>
-          <audio
-            src="audio.mp3"
-            ref={audioRef}
-            onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
-            onLoadedData={(e) => setDuration(e.target.duration)}
-          />
-          <Visualization audioRef={audioRef} />
         </section>
       </section>
       <section id="music-control">
