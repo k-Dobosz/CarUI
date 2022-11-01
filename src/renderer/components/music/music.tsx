@@ -11,7 +11,7 @@ import Visualization from './visualization';
 import img from './artwork.png';
 
 export default function Music() {
-  const audioRef = useRef(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [demandTime, setDemandTime] = useState(0);
@@ -28,6 +28,8 @@ export default function Music() {
   };
 
   useEffect(() => {
+    if (!audioRef.current) return undefined;
+
     audioRef.current.currentTime = demandTime;
   }, [demandTime]);
 
@@ -58,7 +60,6 @@ export default function Music() {
             ref={audioRef}
             onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
             onLoadedData={(e) => setDuration(e.target.duration)}
-            controls
           />
           <Visualization audioRef={audioRef} />
         </section>

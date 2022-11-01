@@ -6,12 +6,11 @@ type VisualiserProps = {
 
 export default function Visualization({ audioRef }: VisualiserProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  let animation: number;
 
   useEffect(() => {
     if (!canvasRef.current) return undefined;
     if (!audioRef.current) return undefined;
-
-    console.log(audioRef);
 
     const audioContext = new (window.AudioContext ||
       (window as any).webkitAudioContext)();
@@ -25,16 +24,28 @@ export default function Visualization({ audioRef }: VisualiserProps) {
     function render() {
       const freqData = new Uint8Array(analyser.frequencyBinCount);
 
-      ctx?.clearRect(0, 0, 300, 150);
+      analyser.getByteFrequencyData(freqData);
+
+      if (!ctx) return;
+      if (!canvasRef.current) return;
+
+      ctx.clearRect(0, 0, canvasRef.current?.width, canvasRef.current?.height);
       ctx.fillStyle = '#fff';
 
       for (let i = 0; i < freqData.length; i += 1) {
         const magnitude = freqData[i];
-        ctx?.fillRect(i * 4, 150, 2, -magnitude * 2);
+        ctx.fillRect(
+          i * 4,
+          canvasRef.current?.height - magnitude / 2,
+          3,
+          -magnitude
+        );
       }
+
+      animation = requestAnimationFrame(render);
     }
 
-    const animation = requestAnimationFrame(render);
+    render();
 
     return () => {
       cancelAnimationFrame(animation);
