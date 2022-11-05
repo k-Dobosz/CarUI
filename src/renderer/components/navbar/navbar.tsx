@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom';
-import { RiNetflixFill, RiYoutubeFill, RiSettings4Fill } from 'react-icons/ri';
+import {
+  RiMusic2Fill,
+  RiSettings4Fill,
+  RiTimeFill,
+  RiCarFill,
+  RiLockFill,
+} from 'react-icons/ri';
 import './navbar.css';
 
 export default function Navbar() {
@@ -13,18 +19,20 @@ export default function Navbar() {
   return (
     <nav>
       <button onClick={handleShutdown} type="button">
-        Shutdown
+        <RiLockFill /> Shutdown
       </button>
-      <Link to="/netflix">
-        <RiNetflixFill /> Netflix
+      <Link to="/">
+        <RiTimeFill /> Clock
       </Link>
-      <Link to="/youtube">
-        <RiYoutubeFill /> Youtube
+      <Link to="/music">
+        <RiMusic2Fill /> Music
       </Link>
       <Link to="/settings">
         <RiSettings4Fill /> Settings
       </Link>
-      <Link to="/carplay">Carplay</Link>
+      <Link to="/carplay">
+        <RiCarFill /> Carplay
+      </Link>
     </nav>
   );
 }

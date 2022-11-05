@@ -1,10 +1,10 @@
 import { RefObject, useEffect, useRef } from 'react';
 
-type VisualiserProps = {
+type VisualizerProps = {
   audioRef: RefObject<HTMLAudioElement>;
 };
 
-export default function Visualization({ audioRef }: VisualiserProps) {
+export default function Visualization({ audioRef }: VisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let animation: number;
 
@@ -21,7 +21,7 @@ export default function Visualization({ audioRef }: VisualiserProps) {
     source.connect(analyser);
     analyser.connect(audioContext.destination);
 
-    function render() {
+    function renderAnimation() {
       const freqData = new Uint8Array(analyser.frequencyBinCount);
 
       analyser.getByteFrequencyData(freqData);
@@ -42,10 +42,11 @@ export default function Visualization({ audioRef }: VisualiserProps) {
         );
       }
 
-      animation = requestAnimationFrame(render);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      animation = requestAnimationFrame(renderAnimation);
     }
 
-    render();
+    renderAnimation();
 
     return () => {
       cancelAnimationFrame(animation);

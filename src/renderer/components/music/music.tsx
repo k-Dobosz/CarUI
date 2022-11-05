@@ -9,6 +9,8 @@ import './music.css';
 import { useEffect, useRef, useState } from 'react';
 import Visualization from './visualization';
 import img from './artwork.png';
+import song from './audio.mp3';
+import Topbar from '../topbar/topbar';
 
 export default function Music() {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -41,55 +43,62 @@ export default function Music() {
   }, [demandTime]);
 
   return (
-    <div id="music">
-      <section id="music-info">
-        <section id="artwork">
-          <img src={img} alt="Artwork" />
-        </section>
-        <section id="info">
-          <div id="info-wrapper">
-            <h2>Artist name</h2>
-            <h1>Song name</h1>
-            <input
-              type="range"
-              name=""
-              id="timeline"
-              min="0"
-              max={duration}
-              value={audioRef.current?.currentTime}
-              onChange={(e) => setDemandTime(e.target.value)}
-            />
-            <div id="time">
-              <span id="currentTime">{currentTime}</span>{' '}
-              <span id="durationTime">{formatTime(duration)}</span>
+    <>
+      <Topbar />
+      <div id="music">
+        <section id="music-info">
+          <section id="artwork">
+            {img ? <img src={img} alt="Artwork" /> : ''}
+          </section>
+          <section id="info">
+            <div id="info-wrapper">
+              <h2>Artist name</h2>
+              <h1>Song name</h1>
+              <input
+                type="range"
+                name=""
+                id="timeline"
+                min="0"
+                max={duration}
+                value={audioRef.current?.currentTime}
+                onChange={(e) => setDemandTime(e.target.value)}
+              />
+              <div id="time">
+                <span id="currentTime">{currentTime}</span>{' '}
+                <span id="durationTime">{formatTime(duration)}</span>
+              </div>
+              <audio
+                src={song}
+                ref={audioRef}
+                onTimeUpdate={(e) =>
+                  setCurrentTime(formatTime(e.target.currentTime))
+                }
+                onLoadedData={(e) => setDuration(e.target.duration)}
+              />
+              <Visualization audioRef={audioRef} />
             </div>
-            <audio
-              src="audio.mp3"
-              ref={audioRef}
-              onTimeUpdate={(e) =>
-                setCurrentTime(formatTime(e.target.currentTime))
-              }
-              onLoadedData={(e) => setDuration(e.target.duration)}
-            />
-            <Visualization audioRef={audioRef} />
+          </section>
+        </section>
+        <section id="music-control">
+          <div id="controls">
+            <button type="button">music list</button>
+            <button type="button">
+              <RiSkipBackFill size="3em" />
+            </button>
+            <button type="button" id="playpause" onClick={playPauseHandler}>
+              {isPlaying ? (
+                <RiPauseFill size="3em" />
+              ) : (
+                <RiPlayFill size="3em" />
+              )}
+            </button>
+            <button type="button">
+              <RiSkipForwardFill size="3em" />
+            </button>
+            <button type="button">repeat</button>
           </div>
         </section>
-      </section>
-      <section id="music-control">
-        <div id="controls">
-          <button type="button">music list</button>
-          <button type="button">
-            <RiSkipBackFill size="3em" />
-          </button>
-          <button type="button" id="playpause" onClick={playPauseHandler}>
-            {isPlaying ? <RiPauseFill size="3em" /> : <RiPlayFill size="3em" />}
-          </button>
-          <button type="button">
-            <RiSkipForwardFill size="3em" />
-          </button>
-          <button type="button">repeat</button>
-        </div>
-      </section>
-    </div>
+      </div>
+    </>
   );
 }

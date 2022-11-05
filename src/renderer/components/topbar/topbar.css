@@ -1,0 +1,14 @@
+.topbar {
+    display: flex;
+    height: 6vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: flex-end;
+}
+
+.clock {
+    align-self: center;
+    font-size: 1.7rem;
+    color: #fff;
+    padding-right: 2rem;
+}

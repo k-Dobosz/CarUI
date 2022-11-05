@@ -23,6 +23,7 @@ import log from 'electron-log';
 import WebSocket from 'ws';
 import { Readable } from 'stream';
 import wifi from 'node-wifi';
+import Store from 'electron-store';
 import { resolveHtmlPath } from './util';
 
 const { exec } = require('node:child_process');
@@ -31,6 +32,9 @@ const keys = require('./bindings.json');
 const mp4Reader = new Readable({
   read(size) {},
 });
+
+const store = new Store();
+store.set('carplay-status', false);
 
 const wss = new WebSocket.Server({ port: 3001, perMessageDeflate: false });
 
@@ -174,17 +178,22 @@ const createWindow = async () => {
 
   const carplay = new Carplay(config, mp4Reader);
 
-  carplay.on('status', (data: { status: any }) => {
-    if (data.status) {
-      mainWindow?.webContents.send('carplay-plugged');
-    } else {
-      mainWindow?.webContents.send('carplay-unplugged');
+  carplay.on('status', (data: { status: boolean }) => {
+    if (!data.status) {
+      mainWindow?.webContents.send('carplay-status-reply', data.status);
     }
+
+    store.set('carplay-status', data.status);
     console.log('data received');
   });
 
   carplay.on('quit', () => {
     mainWindow?.webContents.send('carplay-quit-request');
+  });
+
+  ipcMain.on('carplay-status-request', (_, args) => {
+    const status = store.get('carplay-status');
+    mainWindow?.webContents.send('carplay-status-reply', status);
   });
 
   ipcMain.on('carplay-click', (_, args) => {
@@ -235,6 +244,7 @@ const createWindow = async () => {
   });
 
   globalShortcut.register('q', () => {
+    mainWindow?.webContents.reloadIgnoringCache();
     mainWindow?.setBrowserView(null);
   });
 

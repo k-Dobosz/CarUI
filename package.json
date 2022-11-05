@@ -82,6 +82,7 @@
     "buffer": "^6.0.3",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.7",
+    "electron-store": "^8.1.0",
     "electron-updater": "^5.0.3",
     "jmuxer": "^2.0.5",
     "node-wifi": "^2.0.16",

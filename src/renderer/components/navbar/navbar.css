@@ -11,6 +11,7 @@ nav {
 
 a, button {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     color: #fff;
@@ -28,4 +29,10 @@ a:hover, button:hover{
 button {
     color: #fff;
     border: none;
+}
+
+svg {
+    height: 2em;
+    width: 2em;
+    margin-bottom: 0.2em;
 }
