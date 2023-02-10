@@ -10,5 +10,19 @@
     align-self: center;
     font-size: 1.7rem;
     color: #fff;
-    padding-right: 2rem;
+    padding: 0 2rem;
+}
+
+.currentNetwork {
+    display: flex;
+    align-self: center;
+    font-size: 1.5rem;
+    color: #fff;
+    padding: 0rem;
+}
+
+.currentNetwork svg {
+    align-self: center;
+    max-height: 1.5rem;
+    margin: 0;
 }
