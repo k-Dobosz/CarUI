@@ -20,8 +20,6 @@ import {
 import { autoUpdater } from 'electron-updater';
 import Carplay from 'node-carplay';
 import log from 'electron-log';
-import WebSocket from 'ws';
-import { Readable } from 'stream';
 import wifi from 'node-wifi';
 import Store from 'electron-store';
 import { resolveHtmlPath } from './util';
@@ -29,26 +27,8 @@ import { resolveHtmlPath } from './util';
 const { exec } = require('node:child_process');
 const keys = require('./bindings.json');
 
-const mp4Reader = new Readable({
-  read(size) {},
-});
-
-const store = new Store();
-store.set('carplay-status', false);
-
-const wss = new WebSocket.Server({ port: 3001, perMessageDeflate: false });
-
-wss.on('connection', (ws) => {
-  mp4Reader.on('data', (data) => {
-    ws.send(data);
-  });
-
-  ws.on('error', () => console.log('WebSocket error'));
-  ws.on('close', () => console.log('WebSocket close'));
-});
-
 wifi.init({
-  iface: null,
+  iface: 'wlan0',
 });
 
 class AppUpdater {
@@ -125,8 +105,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1378,
-    height: 768,
+    width: 1024,
+    height: 625,
     icon: getAssetPath('icon.png'),
     backgroundColor: '#000000',
     webPreferences: {
@@ -171,44 +151,21 @@ const createWindow = async () => {
     nightMode: 0,
     hand: 0,
     boxName: 'nodePlay',
-    width: 1368,
-    height: 768,
-    fps: 30,
+    width: 1920,
+    height: 1125,
+    fps: 60,
   };
 
-  const carplay = new Carplay(config, mp4Reader);
-
-  carplay.on('status', (data: { status: boolean }) => {
-    if (!data.status) {
-      mainWindow?.webContents.send('carplay-status-reply', data.status);
-    }
-
-    store.set('carplay-status', data.status);
-    console.log('data received');
-  });
+  const carplay = new Carplay(config);
 
   carplay.on('quit', () => {
     mainWindow?.webContents.send('carplay-quit-request');
-  });
-
-  ipcMain.on('carplay-status-request', (_, args) => {
-    const status = store.get('carplay-status');
-    mainWindow?.webContents.send('carplay-status-reply', status);
   });
 
   ipcMain.on('carplay-click', (_, args) => {
     const data = args[0];
     carplay.sendTouch(data.type, data.x, data.y);
     console.log(data.type, data.x, data.y);
-  });
-
-  ipcMain.on('carplay-fps-request', (e) => {
-    e.returnValue = 30;
-  });
-
-  ipcMain.on('carplay-reload-request', () => {
-    app.relaunch();
-    app.quit();
   });
 
   ipcMain.on('system-shutdown', () => {
@@ -243,22 +200,34 @@ const createWindow = async () => {
     });
   });
 
+  ipcMain.on('wifi-current-request', (_, args: any) => {
+    wifi.getCurrentConnections((error, currentConnections) => {
+      if (error) {
+        console.log(error);
+      } else {
+        mainWindow?.webContents.send('wifi-current', currentConnections[0]);
+      }
+    });
+  });
+
   globalShortcut.register('q', () => {
     mainWindow?.webContents.reloadIgnoringCache();
     mainWindow?.setBrowserView(null);
   });
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [key, value] of Object.entries(keys)) {
-    globalShortcut.register(key, () => {
-      carplay.sendKey(value);
+  if (!isDebug) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(keys)) {
+      globalShortcut.register(key, () => {
+        carplay.sendKey(value);
 
-      if (value === 'selectDown') {
-        setTimeout(() => {
-          carplay.sendKey('selectUp');
-        }, 200);
-      }
-    });
+        if (value === 'selectDown') {
+          setTimeout(() => {
+            carplay.sendKey('selectUp');
+          }, 200);
+        }
+      });
+    }
   }
 };
 

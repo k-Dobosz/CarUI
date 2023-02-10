@@ -15,7 +15,7 @@ import Topbar from '../topbar/topbar';
 export default function Music() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState('');
+  const [currentTime, setCurrentTime] = useState('00:00');
   const [demandTime, setDemandTime] = useState(0);
   const [duration, setDuration] = useState(0);
 

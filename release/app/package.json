@@ -1,6 +1,6 @@
 {
   "name": "CarUI",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "author": "Konrad Dobosz <kdobosz02@gmail.com> (https://kdobosz.pl/)",
   "main": "./dist/main/main.js",
@@ -10,6 +10,6 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "node-carplay": "^2.0.9"
+    "node-carplay": "^3.0.0"
   }
 }
