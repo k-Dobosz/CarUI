@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Carplay, CarplayAudio } from 'react-js-carplay';
 import io from 'socket.io-client';
 import Navbar from '../../components/navbar/navbar';
-import './carplay.css';
 import Topbar from 'renderer/components/topbar/topbar';
 
 const socket = io('ws://localhost:5005');
