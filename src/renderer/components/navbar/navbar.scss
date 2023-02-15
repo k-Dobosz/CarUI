@@ -1,4 +1,4 @@
-nav {
+.navbar {
     position: absolute;
     bottom: 0;
     display: flex;
@@ -9,7 +9,7 @@ nav {
     border-top: 1px solid rgba(0, 0, 0, 0.4);
 }
 
-a, button {
+.navbar_link, .navbar_btn {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -20,19 +20,21 @@ a, button {
     text-decoration: none;
     background-color: rgba(0, 0, 0, 0.25);
     transition: background-color .2s;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.7);
+    }
 }
 
-a:hover, button:hover{
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
-button {
+.navbar_btn {
     color: #fff;
     border: none;
 }
 
-svg {
-    height: 2em;
-    width: 2em;
-    margin-bottom: 0.2em;
+.navbar_link, .navbar_btn {
+    svg {
+        height: 2em;
+        width: 2em;
+        margin-bottom: 0.2em;
+    }
 }
