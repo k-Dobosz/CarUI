@@ -55,5 +55,5 @@ export default function Visualization({ audioRef }: VisualizerProps) {
     };
   }, [audioRef, canvasRef]);
 
-  return <canvas ref={canvasRef} />;
+  return <canvas ref={canvasRef} id="visualization" />;
 }
