@@ -92,6 +92,8 @@
     "react-icons": "^4.4.0",
     "react-js-carplay": "github:k-Dobosz/react-js-carplay",
     "react-router-dom": "^6.3.0",
+    "react-simple-keyboard": "^3.5.27",
+    "simple-keyboard-key-navigation": "^2.4.246",
     "socket.io-client": "^4.6.0",
     "stream": "^0.0.2",
     "ws": "^8.8.0"

@@ -1,0 +1,57 @@
+.keyboard_popup {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  color: black;
+
+  .input_container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  input {
+    font-size: 1.1rem;
+    width: 100%;
+    padding: 1rem;
+  }
+
+  button {
+    border: none;
+    width: 20%;
+    color: #fff;
+    background-color: #000;
+    border-bottom: 1px solid #555;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:active {
+      background: #1c4995;
+    }
+  }
+}
+
+/*
+    Theme: darkTheme
+  */
+
+.simple-keyboard.dark-theme {
+  background-color: #000;
+  border-radius: 0;
+
+  .hg-button {
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+    border-bottom: 1px solid #555;
+    color: white;
+  }
+
+  .hg-button:active {
+    background: #1c4995;
+    color: white;
+  }
+}
