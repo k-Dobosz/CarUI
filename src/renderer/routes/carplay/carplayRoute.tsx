@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Carplay, CarplayAudio } from 'react-js-carplay';
 import io from 'socket.io-client';
-import Navbar from '../../components/navbar/navbar';
 import Topbar from 'renderer/components/topbar/topbar';
+import Navbar from '../../components/navbar/navbar';
 
 const socket = io('ws://localhost:5005');
 
 export default function CarplayRoute() {
-  const [visibility, setVisibility] = useState(true);
+  const location = useLocation();
+  const [visibility, setVisibility] = useState(
+    (location.state != null ? location.state.visibility : null) ?? true
+  );
   const navigate = useNavigate();
 
   const touchHandler = (type: number, x: number, y: number) => {
@@ -28,6 +31,11 @@ export default function CarplayRoute() {
       console.log('quit event');
       navigate('/');
     });
+
+    return () => {
+      socket.off('status');
+      socket.off('quit');
+    };
   }, [navigate]);
 
   return (
