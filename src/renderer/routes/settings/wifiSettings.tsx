@@ -59,6 +59,7 @@ export default function WifiSettings() {
       <KeyboardPopup
         placeholder="Type your wifi password..."
         visible={keyboardVisible}
+        inputType="password"
         onSubmit={(password) => {
           setKeyboardVisible(false);
           console.log(

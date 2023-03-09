@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "carplay": {
+      "dpi": 240,
+      "nightMode": 0,
+      "hand": 0,
+      "boxname": "nodePlay",
+      "width": 1920,
+      "height": 1125,
+      "fps": 60
+    }
+  }
+}

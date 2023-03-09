@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { HTMLInputTypeAttribute, useRef, useState } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 import './keyboard_popup.scss';
@@ -6,6 +6,7 @@ import './keyboard_popup.scss';
 interface KeyboardPopupProps {
   placeholder: string;
   visible: boolean;
+  inputType: HTMLInputTypeAttribute;
   onSubmit: (value: string) => void;
   onCancel: () => void;
 }
@@ -14,7 +15,7 @@ export default function KeyboardPopup(props: KeyboardPopupProps) {
   const [input, setInput] = useState('');
   const [layout, setLayout] = useState('default');
   const keyboard = useRef();
-  const { placeholder, visible, onSubmit, onCancel } = props;
+  const { placeholder, visible, inputType, onSubmit, onCancel } = props;
 
   const onChange = (input) => setInput(input);
 
@@ -53,7 +54,7 @@ export default function KeyboardPopup(props: KeyboardPopupProps) {
           value={input}
           placeholder={placeholder}
           onChange={onChangeInput}
-          type="password"
+          type={inputType}
         />
         <button onClick={onCancel} type="button">
           Cancel

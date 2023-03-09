@@ -12,6 +12,9 @@ export default function SettingsList() {
       <Link to="customization" className="settings_row">
         Customization
       </Link>
+      <Link to="carplay" className="settings_row">
+        Carplay settings
+      </Link>
     </>
   );
 }

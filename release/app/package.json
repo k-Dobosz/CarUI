@@ -10,6 +10,6 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "node-carplay": "^3.0.0"
+    "node-carplay": "^3.0.5"
   }
 }

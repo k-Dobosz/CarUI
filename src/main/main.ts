@@ -23,13 +23,16 @@ import log from 'electron-log';
 import wifi from 'node-wifi';
 import Store from 'electron-store';
 import { resolveHtmlPath } from './util';
+import keys from './bindings.json';
+import defaults from './defaults.json';
 
 const { exec } = require('node:child_process');
-const keys = require('./bindings.json');
 
 wifi.init({
   iface: 'wlan0',
 });
+
+const store = new Store({ defaults });
 
 class AppUpdater {
   constructor() {
@@ -146,26 +149,10 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // new AppUpdater();
 
-  const config = {
-    dpi: 240,
-    nightMode: 0,
-    hand: 0,
-    boxName: 'nodePlay',
-    width: 1920,
-    height: 1125,
-    fps: 60,
-  };
-
-  const carplay = new Carplay(config);
+  const carplay = new Carplay(store.get('settings.carplay'));
 
   carplay.on('quit', () => {
     mainWindow?.webContents.send('carplay-quit-request');
-  });
-
-  ipcMain.on('carplay-click', (_, args) => {
-    const data = args[0];
-    carplay.sendTouch(data.type, data.x, data.y);
-    console.log(data.type, data.x, data.y);
   });
 
   ipcMain.on('system-shutdown', () => {

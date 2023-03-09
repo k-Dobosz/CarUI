@@ -9,6 +9,7 @@ import MusicRoute from './routes/musicRoute';
 import WifiSettings from './routes/settings/wifiSettings';
 import SettingsList from './routes/settings/settingsList';
 import CustomizationSettings from './routes/settings/customizationSettings';
+import CarplaySettings from './routes/settings/carplaySettings';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route index element={<SettingsList />} />
           <Route path="wifi" element={<WifiSettings />} />
           <Route path="customization" element={<CustomizationSettings />} />
+          <Route path="carplay" element={<CarplaySettings />} />
         </Route>
       </Routes>
     </Router>
