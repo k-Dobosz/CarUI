@@ -54,7 +54,6 @@ export default function CarplayRoute() {
         touchEvent={touchHandler}
         style={{ height: visibility ? 'calc(100% - 23.5vh)' : '' }}
       />
-      <CarplayAudio />
       {visibility ? <Navbar /> : ''}
     </>
   );

@@ -10,6 +10,7 @@ import WifiSettings from './routes/settings/wifiSettings';
 import SettingsList from './routes/settings/settingsList';
 import CustomizationSettings from './routes/settings/customizationSettings';
 import CarplaySettings from './routes/settings/carplaySettings';
+import { CarplayAudio } from 'react-js-carplay';
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="carplay" element={<CarplaySettings />} />
         </Route>
       </Routes>
+      <CarplayAudio />
     </Router>
   );
 }
