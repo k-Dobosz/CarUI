@@ -1,3 +1,10 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 export default function CustomizationSettings() {
-  return <div>Customize</div>;
+  return (
+    <Link to="/settings" className="settings_row">
+      Back
+    </Link>
+  );
 }

@@ -1,8 +1,10 @@
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels =
-  | 'carplay-click'
+  | 'carplay-sendkey'
   | 'carplay-quit-request'
+  | 'store-get'
+  | 'store-set'
   | 'system-shutdown'
   | 'open-youtube'
   | 'open-netflix'
@@ -26,6 +28,9 @@ contextBridge.exposeInMainWorld('electron', {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    },
+    invoke(channel: Channels, args: unknown[]) {
+      return ipcRenderer.invoke(channel, args);
     },
   },
 });

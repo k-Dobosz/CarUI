@@ -34,6 +34,16 @@ wifi.init({
 
 const store = new Store({ defaults });
 
+ipcMain.handle('store-get', async (_, key) => {
+  const result = await store.get(key);
+  return result;
+});
+
+ipcMain.handle('store-set', async (_, args) => {
+  const result = await store.set(args[0], args[1]);
+  return result;
+});
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
