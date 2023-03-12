@@ -4,23 +4,12 @@ import {
   RiSettings4Fill,
   RiTimeFill,
   RiCarFill,
-  RiLockFill,
 } from 'react-icons/ri';
 import './navbar.scss';
 
 export default function Navbar() {
-  const handleShutdown = (event: Event) => {
-    const { ipcRenderer } = window.electron;
-    event.preventDefault();
-
-    ipcRenderer.sendMessage('system-shutdown', []);
-  };
-
   return (
     <nav className="navbar">
-      <button className="navbar_btn" onClick={handleShutdown} type="button">
-        <RiLockFill /> Shutdown
-      </button>
       <Link to="/" className="navbar_link">
         <RiTimeFill /> Clock
       </Link>

@@ -44,6 +44,10 @@ ipcMain.handle('store-set', async (_, args) => {
   return result;
 });
 
+ipcMain.on('store-reset', () => {
+  store.clear();
+});
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';

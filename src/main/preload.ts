@@ -5,6 +5,7 @@ export type Channels =
   | 'carplay-quit-request'
   | 'store-get'
   | 'store-set'
+  | 'store-reset'
   | 'system-shutdown'
   | 'open-youtube'
   | 'open-netflix'

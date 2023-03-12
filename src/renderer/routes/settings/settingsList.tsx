@@ -15,6 +15,9 @@ export default function SettingsList() {
       <Link to="carplay" className="settings_row">
         Carplay settings
       </Link>
+      <Link to="system" className="settings_row">
+        System settings
+      </Link>
     </>
   );
 }
