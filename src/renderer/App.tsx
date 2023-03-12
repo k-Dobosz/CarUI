@@ -12,6 +12,7 @@ import SettingsList from './routes/settings/settingsList';
 import CustomizationSettings from './routes/settings/customizationSettings';
 import CarplaySettings from './routes/settings/carplaySettings';
 import SystemSettings from './routes/settings/systemSettings';
+import SystemAboutSettings from './routes/settings/systemAboutSettings';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="customization" element={<CustomizationSettings />} />
           <Route path="carplay" element={<CarplaySettings />} />
           <Route path="system" element={<SystemSettings />} />
+          <Route path="system/about" element={<SystemAboutSettings />} />
         </Route>
       </Routes>
       <CarplayAudio />

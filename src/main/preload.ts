@@ -13,7 +13,8 @@ export type Channels =
   | 'wifi-networks'
   | 'wifi-connect'
   | 'wifi-current-request'
-  | 'wifi-current';
+  | 'wifi-current'
+  | 'get-version';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

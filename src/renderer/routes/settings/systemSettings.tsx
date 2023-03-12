@@ -16,9 +16,9 @@ export default function SystemSettings() {
       <Link to="/settings" className="settings_row">
         Back
       </Link>
-      <button onClick={() => {}} type="button" className="settings_row">
+      <Link to="about" className="settings_row">
         About CarUI
-      </button>
+      </Link>
       <button onClick={handleReset} type="button" className="settings_row">
         Reset settings
       </button>

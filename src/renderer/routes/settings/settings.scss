@@ -10,6 +10,7 @@
   overflow: auto;
 
   .settings_row {
+    display: flex;
     padding: 1.8rem 1.5rem;
     transition: background-color 0.2s ease-in-out;
     text-decoration: none;
@@ -36,6 +37,7 @@
   button.settings_row {
     background-color: inherit;
     border: none;
+    font-size: 1rem;
 
     &:hover {
       cursor: pointer;

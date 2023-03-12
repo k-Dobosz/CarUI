@@ -211,6 +211,23 @@ const createWindow = async () => {
     });
   });
 
+  ipcMain.handle('get-version', (_, args) => {
+    let results = {};
+
+    for (const type of args) {
+      switch (type) {
+        case 'app':
+          results[type] = app.getVersion();
+          break;
+        default:
+          results[type] = process.versions[type];
+          break;
+      }
+    }
+
+    return results;
+  });
+
   globalShortcut.register('q', () => {
     mainWindow?.webContents.reloadIgnoringCache();
     mainWindow?.setBrowserView(null);

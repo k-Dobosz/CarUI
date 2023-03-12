@@ -21,7 +21,7 @@ export default function HomeRoute() {
   }, [navigate]);
   return (
     <main>
-      <p>{clock()}</p>
+      <p id="home-clock">{clock()}</p>
       <Navbar />
     </main>
   );
