@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import Topbar from 'renderer/components/topbar/topbar';
 import './settings.scss';
 

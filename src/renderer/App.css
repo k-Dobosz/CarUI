@@ -6,6 +6,7 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: 'Barlow', sans-serif;
 }
 
  body {
@@ -13,9 +14,8 @@
   color: white;
   height: 100vh;
   background-color: black;
-  background-image: url('../../public/background.png');
+  background-image: url('../../public/wallpapers/4.png');
   background-size: cover;
-  font-family: 'Barlow', sans-serif;
   overflow-y: hidden;
   display: flex;
   justify-content: center;
