@@ -1,5 +1,8 @@
 {
   "settings": {
+    "customization": {
+      "wallpaperUrl": "wallpapers/4.png"
+    },
     "carplay": {
       "dpi": 240,
       "nightMode": 0,
