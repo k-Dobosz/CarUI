@@ -1,6 +1,15 @@
 # CarUI
 
-<img width="1490" alt="Screenshot 2022-11-23 at 15 09 37" src="https://user-images.githubusercontent.com/31768756/203568135-1f546695-5db6-4db1-a9e2-cb16fa80c681.png">
+<img width="1136" alt="image" src="https://user-images.githubusercontent.com/31768756/228375118-c73dc895-49c4-4034-b36e-9d189bfdde4d.png">
+
+<details>
+<summary>More screenshots</summary>
+  <ul>
+    <li>Music page <img width="1136" alt="image" src="https://user-images.githubusercontent.com/31768756/228375443-97e60ad9-73c7-4d96-bd36-61dc46a51594.png"></li>
+    <li>Settings page <img width="1136" alt="image" src="https://user-images.githubusercontent.com/31768756/228375658-608b7f05-7735-483c-9af9-a13ded25f8d2.png"></li>
+    <li>Carplay <img width="1136" alt="image" src="https://user-images.githubusercontent.com/31768756/228375781-c1f80c14-bdb5-4fdc-8a4c-4f30f6f7f0df.png"></li>
+  </ul>
+</details>
 
 ## About
 
