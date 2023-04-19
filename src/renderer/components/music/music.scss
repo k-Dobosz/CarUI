@@ -1,88 +1,97 @@
-  #music {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+#music {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#artwork {
+  padding: 2rem;
+  padding-right: 0;
+}
+
+#artwork img,
+.img-placeholder {
+  min-width: 250px;
+  min-height: 250px;
+  height: 300px;
+  width: 300px;
+}
+
+.img-placeholder {
+  display: flex;
+  justify-content: center;
+  color: #333;
+  background: radial-gradient(
+    circle,
+    rgba(238, 237, 237, 1) 38%,
+    rgba(176, 176, 176, 1) 100%
+  );
+
+  svg {
+    align-self: center;
   }
-  
-  #artwork {
-    padding: 2rem;
-    padding-right: 0;
+}
+
+#music-info {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+#info {
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+
+  h1 {
+    font-size: 2rem;
+    padding-bottom: 0.5rem;
   }
 
-  #artwork img, .img-placeholder {
-    min-width: 250px;
-    min-height: 250px;
-    height: 300px;
-    width: 300px;
+  h2 {
+    color: rgba($color: #fff, $alpha: 0.9);
+    font-size: 1.1rem;
   }
+}
 
-  .img-placeholder {
-    display: flex;
-    justify-content: center;
-    color: #333;
-    background: radial-gradient(circle, rgba(238,237,237,1) 38%, rgba(176,176,176,1) 100%);
+#visualization {
+  width: 100%;
+  height: auto;
+  max-height: 175px;
+}
 
+#timeline {
+  width: 100%;
+  height: 4px;
+  background-color: #ddd;
+  -webkit-appearance: none;
+  position: relative;
+  overflow: hidden;
+}
 
-    svg {
-      align-self: center;
-    }
-  }
-  
-  #music-info {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-  }
-  
-  #info {
-    width: 100%;
-    height: 100%;
-    padding: 2rem;
+#timeline::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: none;
+  height: 0px;
+  width: 0px;
+  box-shadow: -100vw 0 0 100vw dodgerblue;
+}
 
-    h1, h2 {
-      padding-bottom: 1rem;
-    }
-  }
-  
-  #visualization {
-    width: 100%;
-    height: auto;
-    max-height: 175px;
-  }
-  
-  #timeline {
-    width: 100%;
-    height: 4px;
-    background-color: #ddd;
-    -webkit-appearance: none;
-    position: relative;
-    overflow: hidden;
-  }
+#time {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-  #timeline::-webkit-slider-thumb {
-    -webkit-appearance: none;
+#music-control {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  button {
+    background: none;
     border: none;
-    height: 0px;
-    width: 0px;
-    box-shadow: -100vw 0 0 100vw dodgerblue;
-
+    color: #fff;
   }
-  
-  #time {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  #music-control {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-
-    button {
-      background: none;
-      border: none;
-      color: #fff;
-    }
-  }
+}
