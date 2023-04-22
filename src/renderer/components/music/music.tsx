@@ -15,20 +15,33 @@ type CurrentSongType = {
   title: string;
   artist: string;
   coverImage: string;
+  currentTime: number;
+  duration: number;
 };
 
 export default function Music() {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement>();
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [currentTime, setCurrentTime] = useState<string>('00:00');
   const [demandTime, setDemandTime] = useState<number>(0);
-  const [duration, setDuration] = useState<number>(0);
   const [currentSong, setCurrentSong] = useState<CurrentSongType>({
     title: 'Song name',
     artist: 'Artist name',
     coverImage: '',
+    currentTime: 0,
+    duration: 0,
   });
   const { ipcRenderer } = window.electron;
+
+  const updateCurrentSong = (inputData) => {
+    setCurrentSong({ ...currentSong, ...inputData });
+  };
+
+  const formatTime = (time: number): string => {
+    const dmin = Math.floor(time / 60);
+    const dsec = Math.floor(time) - dmin * 60;
+
+    return `${(dmin < 10 ? '0' : '') + dmin}:${(dsec < 10 ? '0' : '') + dsec}`;
+  };
 
   const playPauseHandler = (): void => {
     if (isPlaying) {
@@ -40,13 +53,6 @@ export default function Music() {
     }
   };
 
-  const formatTime = (time: number): string => {
-    const dmin = Math.floor(time / 60);
-    const dsec = Math.floor(time) - dmin * 60;
-
-    return `${(dmin < 10 ? '0' : '') + dmin}:${(dsec < 10 ? '0' : '') + dsec}`;
-  };
-
   const convertImageDataToBase64 = (imageData: Array<number>): String => {
     return Buffer.from(imageData).toString('base64');
   };
@@ -54,10 +60,13 @@ export default function Music() {
   useEffect(() => {
     if (!audioRef.current) return undefined;
 
+    audioRef.current.currentTime = demandTime;
+  }, [demandTime]);
+
+  useEffect(() => {
     jsmediatags.read(audioRef.current.src, {
       onSuccess: ({ tags }) => {
-        console.log(tags);
-        setCurrentSong({
+        updateCurrentSong({
           title: tags.title,
           artist: tags.artist,
           coverImage: `data:${
@@ -69,9 +78,7 @@ export default function Music() {
         console.log(':(', error.type, error.info);
       },
     });
-
-    audioRef.current.currentTime = demandTime;
-  }, [demandTime]);
+  }, [audioRef.current?.src]);
 
   return (
     <div id="music">
@@ -93,21 +100,25 @@ export default function Music() {
             name=""
             id="timeline"
             min="0"
-            max={duration}
-            value={audioRef.current?.currentTime}
+            max={currentSong.duration}
+            value={audioRef.current?.currentTime || 0}
             onChange={(e) => setDemandTime(Number(e.target.value))}
           />
           <div id="time">
-            <span id="currentTime">{currentTime}</span>{' '}
-            <span id="durationTime">{formatTime(duration)}</span>
+            <span id="currentTime">{formatTime(currentSong.currentTime)}</span>{' '}
+            <span id="durationTime">{formatTime(currentSong.duration)}</span>
           </div>
           <audio
             src={song}
             ref={audioRef}
             onTimeUpdate={(e) =>
-              setCurrentTime(formatTime(e.target.currentTime))
+              updateCurrentSong({
+                currentTime: e.target.currentTime,
+              })
             }
-            onLoadedData={(e) => setDuration(e.target.duration)}
+            onLoadedData={(e) =>
+              updateCurrentSong({ duration: e.target.duration })
+            }
           />
           <Visualization audioRef={audioRef} />
         </section>

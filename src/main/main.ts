@@ -169,6 +169,10 @@ const createWindow = async () => {
     mainWindow?.webContents.send('carplay-quit-request');
   });
 
+  ipcMain.on('carplay-sendkey', (_, args) => {
+    carplay.sendKey(args[0].key);
+  });
+
   ipcMain.on('system-shutdown', () => {
     if (isDebug) {
       app.exit(0);
