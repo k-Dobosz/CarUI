@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import KeyboardPopup from 'renderer/utils/keyboard_popup/keyboard_popup';
+
+import KeyboardPopup from '../../utils/keyboard_popup/keyboard_popup';
+import Focusable from '../../components/focus/focusable';
 
 interface SettingsData {
   dpi: number;
@@ -25,101 +27,82 @@ export default function CarplaySettings() {
     height: 1125,
     fps: 60,
   });
+
   const { ipcRenderer } = window.electron;
 
   useEffect(() => {
     ipcRenderer
       .invoke('store-get', ['settings.carplay'])
-      .then(({ settings: data }) => setSettings(data.carplay))
-      .catch((err) => console.error(err));
+      .then(({ settings: data }) => {
+        setSettings(data.carplay);
+      })
+      .catch(console.error);
   }, [ipcRenderer]);
 
-  const handleInput = (e) => {
-    setCurrentSetting(e.target.id);
+  const handleInput = (setting: string) => {
+    setCurrentSetting(setting);
     setKeyboardVisible(true);
   };
 
+  const saveSetting = (value: string) => {
+    if (!currentSetting) {
+      return;
+    }
+
+    setSettings((prev) => ({
+      ...prev,
+      [currentSetting]: value,
+    }));
+
+    ipcRenderer
+      .invoke('store-set', [`settings.carplay.${currentSetting}`, value])
+      .catch(console.error);
+
+    setKeyboardVisible(false);
+  };
+
+  const rows = [
+    'dpi',
+    'nightMode',
+    'hand',
+    'boxname',
+    'width',
+    'height',
+    'fps',
+  ];
+
   return (
     <>
-      <Link to="/settings" className="settings_row">
-        Back
-      </Link>
+      <Focusable id="back">
+        <Link to="/settings" className="settings_row">
+          Back
+        </Link>
+      </Focusable>
+
       <form>
-        <label htmlFor="dpi" className="settings_row">
-          dpi
-          <input value={settings.dpi} id="dpi" onClick={handleInput} readOnly />
-        </label>
-        <label htmlFor="nightMode" className="settings_row">
-          nightMode
-          <input
-            value={settings.nightMode}
-            id="nightMode"
-            onClick={handleInput}
-            readOnly
-          />
-        </label>
-        <label htmlFor="hand" className="settings_row">
-          hand
-          <input
-            value={settings.hand}
-            id="hand"
-            onClick={handleInput}
-            readOnly
-          />
-        </label>
-        <label htmlFor="boxname" className="settings_row">
-          boxname
-          <input
-            value={settings.boxname}
-            id="boxname"
-            onClick={handleInput}
-            readOnly
-          />
-        </label>
-        <label htmlFor="width" className="settings_row">
-          width
-          <input
-            value={settings.width}
-            id="width"
-            onClick={handleInput}
-            readOnly
-          />
-        </label>
-        <label htmlFor="height" className="settings_row">
-          height
-          <input
-            value={settings.height}
-            id="height"
-            onClick={handleInput}
-            readOnly
-          />
-        </label>
-        <label htmlFor="fps" className="settings_row">
-          fps
-          <input value={settings.fps} id="fps" onClick={handleInput} readOnly />
-        </label>
+        {rows.map((key) => (
+          <Focusable key={key} id={`carplay-${key}`}>
+            <label htmlFor={key} className="settings_row">
+              <span>{key}</span>
+
+              <input
+                id={key}
+                value={settings[key]}
+                readOnly
+                onClick={() => handleInput(key)}
+              />
+            </label>
+          </Focusable>
+        ))}
       </form>
+
       <KeyboardPopup
         placeholder="Change setting..."
         visible={keyboardVisible}
         inputType="text"
-        onSubmit={(value) => {
-          if (currentSetting != null) {
-            settings[currentSetting] = value;
-
-            ipcRenderer
-              .invoke('store-set', [
-                `settings.carplay.${currentSetting}`,
-                value,
-              ])
-              .catch((err) => console.error(err));
-          }
-
-          setKeyboardVisible(false);
-        }}
-        onCancel={() => {
-          setKeyboardVisible(false);
-        }}
+        initialValue={settings[currentSetting ?? '']}
+        onSubmit={saveSetting}
+        onCancel={() => setKeyboardVisible(false)}
       />
     </>
   );

@@ -1,0 +1,57 @@
+.home-clock {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  padding: 2.2rem 3.5rem;
+  font-size: clamp(6rem, 13vw, 10rem);
+  font-weight: 200;
+  letter-spacing: -0.07em;
+  line-height: .9;
+  font-variant-numeric: tabular-nums;
+  color: white;
+  isolation: isolate;
+
+  text-shadow:
+    0 0 50px rgba(255,255,255,.15),
+    0 25px 80px rgba(0,0,0,.6);
+
+  animation:
+    clockFloat 6s ease-in-out infinite;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 32px;
+
+    background:
+      linear-gradient(
+        135deg,
+        rgba(255,255,255,.12),
+        rgba(255,255,255,.03)
+      );
+
+    border:
+      1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:
+      blur(25px);
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.15),
+      0 30px 100px rgba(0,0,0,.45);
+  }
+}
+
+@keyframes clockFloat {
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+  50% {
+    transform:
+      translateY(-6px);
+  }
+}

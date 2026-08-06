@@ -61,6 +61,10 @@ const configuration: webpack.Configuration = {
     }),
   ],
 
+  externals: {
+    'node-carplay': 'commonjs node-carplay',
+  },
+
   /**
    * Disables webpack processing of __dirname and __filename.
    * If you run the bundle in node.js it falls back to these values of node.js.

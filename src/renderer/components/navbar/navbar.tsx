@@ -6,22 +6,46 @@ import {
   RiCarFill,
 } from 'react-icons/ri';
 import './navbar.scss';
+import Focusable from '../focus/focusable';
 
 export default function Navbar() {
+  const items = [
+    { icon: <RiTimeFill />, title: 'Clock', destination: '/' },
+    { icon: <RiMusic2Fill />, title: 'Music', destination: '/music' },
+    { icon: <RiSettings4Fill />, title: 'Settings', destination: '/settings' },
+    { icon: <RiCarFill />, title: 'Carplay', destination: '/carplay' },
+    { icon: <RiCarFill />, title: 'Camera', destination: '/camera' },
+  ];
+
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar_link">
-        <RiTimeFill /> Clock
-      </Link>
-      <Link to="/music" className="navbar_link">
-        <RiMusic2Fill /> Music
-      </Link>
-      <Link to="/settings" className="navbar_link">
-        <RiSettings4Fill /> Settings
-      </Link>
-      <Link to="/carplay" className="navbar_link">
-        <RiCarFill /> Carplay
-      </Link>
+      <div
+        className="main-grid"
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        {items.map((item) => (
+          <Focusable
+            id={`navbar-${item.title.toLowerCase()}`}
+          >
+            <Link
+              to={item.destination}
+              className="navbar_link grid-item"
+            >
+              <div
+                className="grid-item-icon"
+                aria-hidden="true"
+              >
+                {item.icon}
+              </div>
+
+              <div className="grid-item-title">
+                {item.title}
+              </div>
+            </Link>
+          </Focusable>
+        ))}
+      </div>
     </nav>
   );
 }

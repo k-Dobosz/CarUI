@@ -2,29 +2,37 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  color: black;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+  }
 
   .input_container {
     display: flex;
-    flex-direction: row;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
   }
 
   input {
-    font-size: 1.1rem;
-    width: 100%;
+    flex: 1;
     padding: 1rem;
+    font-size: 1.2rem;
+    color: white;
+    background: #111;
+    border: none;
+    outline: none;
   }
 
   button {
-    border: none;
     width: 20%;
-    color: #fff;
-    background-color: #000;
-    border-bottom: 1px solid #555;
-
-    &:hover {
-      cursor: pointer;
-    }
+    border: none;
+    color: white;
+    background: #000;
+    font-size: 1rem;
 
     &:active {
       background: #1c4995;
@@ -32,12 +40,8 @@
   }
 }
 
-/*
-    Theme: darkTheme
-  */
-
 .simple-keyboard.dark-theme {
-  background-color: #000;
+  background: #000;
   border-radius: 0;
 
   .hg-button {
@@ -46,12 +50,18 @@
     justify-content: center;
     align-items: center;
     background: #000;
+    color: white;
     border-bottom: 1px solid #555;
-    color: white;
-  }
 
-  .hg-button:active {
-    background: #1c4995;
-    color: white;
+    &:active {
+      background: #1c4995;
+    }
+
+    &.keyboard-focused {
+      background: #007aff !important;
+      color: white !important;
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 122, 255, 0.7);
+    }
   }
 }

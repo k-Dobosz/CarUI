@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { RiNetflixFill, RiYoutubeFill, RiSettings4Fill } from 'react-icons/ri';
-import './topbar.css';
-import clock from 'renderer/utils/clock';
+import './topbar.scss';
+import Clock from '../clock/clock';
 import { useEffect, useState } from 'react';
 import { RiWifiFill } from 'react-icons/ri';
 
@@ -26,7 +26,7 @@ export default function Topbar() {
       ) : (
         ''
       )}
-      <p className="clock">{clock()}</p>
+      <Clock />
     </div>
   );
 }

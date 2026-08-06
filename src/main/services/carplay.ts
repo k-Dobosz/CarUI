@@ -1,5 +1,5 @@
 import EventEmitter from 'events';
-import Carplay from 'node-carplay/node';
+import Carplay from 'node-carplay';
 
 export default class CarplayService extends EventEmitter {
   private instance: any;

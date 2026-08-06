@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import Navbar from '../../components/navbar/navbar';
-import clock from '../../utils/clock';
-import './home.css';
+import Clock from '../../components/clock/clock';
+import './home.scss';
+
 const socket = io('ws://localhost:5005');
 
 export default function HomeRoute() {
@@ -21,7 +22,7 @@ export default function HomeRoute() {
   }, [navigate]);
   return (
     <main>
-      <p id="home-clock">{clock()}</p>
+      <Clock className="home-clock" />
       <Navbar />
     </main>
   );

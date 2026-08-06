@@ -14,7 +14,7 @@
   color: white;
   height: 100vh;
   background-color: black;
-  background-image: url('../../public/wallpapers/4.png');
+  /* background-image: url('../../public/wallpapers/2.png'); */
   background-size: cover;
   overflow-y: hidden;
   display: flex;

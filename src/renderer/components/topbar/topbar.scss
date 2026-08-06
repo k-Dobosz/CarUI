@@ -1,0 +1,36 @@
+.topbar {
+  display: flex;
+  align-items: center;
+  height: 6vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: flex-end;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+.topbar .clock-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.3rem;
+  padding: 0 1.5rem;
+  color: rgba(255,255,255,.95);
+}
+
+.currentNetwork {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  font-size: 1.2rem;
+  color: rgba(255,255,255,.85);
+}
+
+.currentNetwork svg {
+  width: 1.3rem;
+  height: 1.3rem;
+  color: #34c759;
+}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import KeyboardPopup from 'renderer/utils/keyboard_popup/keyboard_popup';
+
+import KeyboardPopup from '../../utils/keyboard_popup/keyboard_popup';
+import Focusable from '../../components/focus/focusable';
 
 type Network = {
   ssid: string;
@@ -20,56 +22,61 @@ export default function WifiSettings() {
   useEffect(() => {
     ipcRenderer.sendMessage('wifi-networks-request', []);
 
-    ipcRenderer.on('wifi-networks', (args) => {
+    const cleanup = ipcRenderer.on('wifi-networks', (args) => {
       const networksArray = args as Array<Network>;
+
       setNetworks(networksArray);
       setIsLoading(false);
-      console.log(args);
     });
-  }, [ipcRenderer]);
 
-  const list =
-    networks.length > 0 ? (
-      networks.map((net) => {
-        return (
-          <button
-            onClick={() => {
-              setSelectedNetwork(net.ssid);
-              setKeyboardVisible(true);
-            }}
-            type="button"
-            className="settings_row"
-            key={net.ssid}
-          >
-            {net.ssid}
-          </button>
-        );
-      })
-    ) : (
-      <span>No wifi networks available</span>
-    );
+    return () => {
+      cleanup?.();
+    };
+  }, [ipcRenderer]);
 
   return (
     <>
-      <Link to="/settings" className="settings_row">
-        Back
-      </Link>
-      Networks:
-      {isLoading ? 'Loading...' : list}
+      <Focusable id="back">
+        <Link to="/settings" className="settings_row">
+          Back
+        </Link>
+      </Focusable>
+
+      <div className="settings_section_title">Networks:</div>
+
+      {isLoading ? (
+        <div className="settings_row">Loading...</div>
+      ) : networks.length > 0 ? (
+        networks.map((net) => (
+          <Focusable key={net.ssid} id={`wifi-${net.ssid}`}>
+            <button
+              type="button"
+
+              className="settings_row"
+
+              onClick={() => {
+                setSelectedNetwork(net.ssid);
+
+                setKeyboardVisible(true);
+              }}
+            >
+              {net.ssid}
+            </button>
+          </Focusable>
+        ))
+      ) : (
+        <div className="settings_row">No wifi networks available</div>
+      )}
+
       <KeyboardPopup
         placeholder="Type your wifi password..."
         visible={keyboardVisible}
         inputType="password"
         onSubmit={(password) => {
           setKeyboardVisible(false);
-          console.log(
-            'Submitted!, selected network:',
-            selectedNetwork,
-            ', password:',
-            password
-          );
           connect(selectedNetwork, password);
         }}
+
         onCancel={() => {
           setKeyboardVisible(false);
         }}

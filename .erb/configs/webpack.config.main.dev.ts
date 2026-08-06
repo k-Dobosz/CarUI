@@ -50,7 +50,7 @@ const configuration: webpack.Configuration = {
   ],
 
   externals: {
-    'node-carplay/node': 'commonjs node-carplay/node',
+    'node-carplay': 'commonjs node-carplay',
   },
 
   /**
