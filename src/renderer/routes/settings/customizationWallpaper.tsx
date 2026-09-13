@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Focusable from '../../components/focus/focusable';
 import './customization.scss';
@@ -5,21 +6,24 @@ import './customization.scss';
 export default function CustomizationWallpaper() {
   const { ipcRenderer } = window.electron;
 
+  const [items, setItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    ipcRenderer
+      .invoke('get-all-wallpaper-paths')
+      .then((result: string[]) => {
+        setItems(result);
+      })
+      .catch(console.error);
+  }, [ipcRenderer]);
+
   const handleChange = (value: string): void => {
     ipcRenderer
-      .invoke('store-set', [`settings.customization.wallpaperUrl`, value])
+      .invoke('store-set', ['settings.customization.wallpaperUrl', value])
       .catch((err) => console.error(err));
 
-    document.querySelector('body')!.style.backgroundImage = `url('${value}')`;
+    document.body.style.backgroundImage = `url("${value}")`;
   };
-
-  const items = [
-    'wallpapers/1.png',
-    'wallpapers/2.png',
-    'wallpapers/3.png',
-    'wallpapers/4.png',
-    'wallpapers/4.png',
-  ];
 
   return (
     <>
@@ -28,17 +32,17 @@ export default function CustomizationWallpaper() {
           Back
         </Link>
       </Focusable>
+
       <ul className="settings_wallpaper_list">
         {items.map((item, index) => (
-          <li>
+          <li key={item}>
             <Focusable id={`wallpaper-${index}`}>
               <button onClick={() => handleChange(item)} type="button">
-                <img src={item} alt="Wallpaper" />
+                <img src={`${item}`} alt="Wallpaper" />
               </button>
             </Focusable>
           </li>
         ))}
-        <li></li>
       </ul>
     </>
   );

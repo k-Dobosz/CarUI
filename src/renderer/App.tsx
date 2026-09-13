@@ -22,17 +22,17 @@ export default function App() {
   const { ipcRenderer } = window.electron;
 
   const changeBg = (wallpaperUrl: string): void => {
-    document.querySelector('body')!.style.backgroundImage = `url('${wallpaperUrl}')`;
+    document.querySelector('body')!.style.backgroundImage =
+      `url('${wallpaperUrl}')`;
   };
 
   useEffect(() => {
+    const key = 'settings.customization.wallpaperUrl';
+
     ipcRenderer
-      .invoke('store-get', ['settings.customization.wallpaperUrl'])
-      .then((url) => {
-        console.log('wallpaperUrl:', url);
-        changeBg(url)
-      })
-      .catch((err) => console.error(err));
+      .invoke('store-get', key)
+      .then((url) => changeBg(url))
+      .catch(console.error);
   }, []);
 
   return (

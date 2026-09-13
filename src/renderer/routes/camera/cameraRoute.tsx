@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CameraRoute() {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const reconnectTimer = useRef(null);
+  const navigate = useNavigate();
 
   const [cameraReady, setCameraReady] = useState(false);
 
@@ -65,8 +67,20 @@ export default function CameraRoute() {
   useEffect(() => {
     startCamera();
 
+    function handleKeyDown(event) {
+      if (event.key === 'Backspace' || event.key === 'Escape') {
+        event.preventDefault();
+
+        stopCamera();
+        navigate(-1);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       clearTimeout(reconnectTimer.current);
+      window.removeEventListener('keydown', handleKeyDown);
       stopCamera();
     };
   }, []);

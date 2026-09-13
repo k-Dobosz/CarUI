@@ -75,13 +75,9 @@ async function createWindow() {
 
   mainWindow = new BrowserWindow({
     show: false,
-
     width: 1024,
-
     height: 625,
-
     icon: getAssetPath('icon.png'),
-
     backgroundColor: '#000000',
 
     webPreferences: {
