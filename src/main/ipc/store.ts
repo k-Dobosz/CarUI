@@ -18,6 +18,12 @@ export function registerStoreIPC(store: Store) {
     store.clear();
   });
 
+  ipcMain.handle('get-public-path', () => {
+    return app.isPackaged
+      ? path.join(process.resourcesPath, 'public/')
+      : '';
+  });
+
   ipcMain.handle('get-all-wallpaper-paths', () => {
     const wallpapersDir = app.isPackaged
       ? path.join(process.resourcesPath, 'public', 'wallpapers')
@@ -43,6 +49,6 @@ export function registerStoreIPC(store: Store) {
           entry.isFile() &&
           imageExtensions.has(path.extname(entry.name).toLowerCase()),
       )
-      .map((entry) => path.join(app.isPackaged ? wallpapersDir : 'wallpapers/', entry.name));
+      .map((entry) => path.join('wallpapers/', entry.name));
   });
 }

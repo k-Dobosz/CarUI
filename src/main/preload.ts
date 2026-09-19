@@ -15,6 +15,7 @@ export type Channels =
   | 'wifi-current-request'
   | 'wifi-current'
   | 'get-version'
+  | 'get-public-path'
   | 'get-all-wallpaper-paths'
   | 'reverse-changed'
   | 'reverse-state';

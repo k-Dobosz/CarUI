@@ -191,8 +191,9 @@ async function start() {
 
   setupShortcuts(carplay);
 
-  startReverseMonitor(window);
-
+  if (!isDebug) {
+    startReverseMonitor(window);
+  }
   // setupUpdater();
 }
 

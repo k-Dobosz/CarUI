@@ -27,14 +27,21 @@ export default function App() {
       `url('${wallpaperUrl}')`;
   };
 
-  useEffect(() => {
-    const key = 'settings.customization.wallpaperUrl';
 
-    ipcRenderer
-      .invoke('store-get', key)
-      .then((url) => changeBg(url))
-      .catch(console.error);
-  }, []);
+  useEffect(() => {
+    const loadWallpaper = async () => {
+      try {
+        const path = await ipcRenderer.invoke('get-public-path') as string;
+        const wallpaper = await ipcRenderer.invoke('store-get', 'settings.customization.wallpaperUrl') as string;
+
+        changeBg(path + wallpaper);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadWallpaper();
+  }, [ipcRenderer]);
 
   return (
     <FocusProvider>

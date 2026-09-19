@@ -7,14 +7,22 @@ export default function CustomizationWallpaper() {
   const { ipcRenderer } = window.electron;
 
   const [items, setItems] = useState<string[]>([]);
+  const [path, setPath] = useState<string>('');
 
   useEffect(() => {
-    ipcRenderer
-      .invoke('get-all-wallpaper-paths')
-      .then((result: string[]) => {
-        setItems(result);
-      })
-      .catch(console.error);
+    const loadWallpapers = async () => {
+      try {
+        const path = await ipcRenderer.invoke('get-public-path') as string;
+        setPath(path);
+
+        const wallpapers = await ipcRenderer.invoke('get-all-wallpaper-paths') as string[];        
+        setItems(wallpapers);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadWallpapers();
   }, [ipcRenderer]);
 
   const handleChange = (value: string): void => {
@@ -22,7 +30,7 @@ export default function CustomizationWallpaper() {
       .invoke('store-set', ['settings.customization.wallpaperUrl', value])
       .catch((err) => console.error(err));
 
-    document.body.style.backgroundImage = `url("${value}")`;
+    document.body.style.backgroundImage = `url("${path}${value}")`;
   };
 
   return (
@@ -38,7 +46,7 @@ export default function CustomizationWallpaper() {
           <li key={item}>
             <Focusable id={`wallpaper-${index}`}>
               <button onClick={() => handleChange(item)} type="button">
-                <img src={`${item}`} alt="Wallpaper" />
+                <img src={`${path}${item}`} alt="Wallpaper" />
               </button>
             </Focusable>
           </li>
