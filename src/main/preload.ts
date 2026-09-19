@@ -15,7 +15,9 @@ export type Channels =
   | 'wifi-current-request'
   | 'wifi-current'
   | 'get-version'
-  | 'get-all-wallpaper-paths';
+  | 'get-all-wallpaper-paths'
+  | 'reverse-changed'
+  | 'reverse-state';
 
 contextBridge.exposeInMainWorld('electron', {
   ipcRenderer: {

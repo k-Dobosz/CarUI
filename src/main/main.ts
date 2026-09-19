@@ -27,6 +27,11 @@ import CarplayService from './services/carplay';
 
 import defaults from './defaults.json';
 import keys from './bindings.json';
+import {
+  registerReverseMonitorIPC,
+  startReverseMonitor,
+  stopReverseMonitor,
+} from './services/reverseMonitor';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -174,14 +179,11 @@ async function start() {
   const window = await createWindow();
 
   registerStoreIPC(store);
-
   registerSystemIPC();
-
   registerWifiIPC(window);
-
   registerBrowserIPC(window);
-
   registerVersionIPC();
+  registerReverseMonitorIPC();
 
   const carplay = new CarplayService(store.get('settings.carplay'));
 
@@ -189,7 +191,8 @@ async function start() {
 
   setupShortcuts(carplay);
 
-  // Enable if wanted
+  startReverseMonitor(window);
+
   // setupUpdater();
 }
 
@@ -201,6 +204,7 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', () => {
   globalShortcut.unregisterAll();
+  stopReverseMonitor();
 });
 
 app

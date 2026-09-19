@@ -17,6 +17,7 @@ import CustomizationWallpaper from './routes/settings/customizationWallpaper';
 import CameraRoute from './routes/camera/cameraRoute';
 import { FocusProvider } from './components/focus/focusContext';
 import { useEffect } from 'react';
+import ReverseCameraController from './components/camera/cameraController';
 
 export default function App() {
   const { ipcRenderer } = window.electron;
@@ -38,6 +39,7 @@ export default function App() {
   return (
     <FocusProvider>
       <Router>
+        <ReverseCameraController />
         <Routes>
           <Route path="/" element={<HomeRoute />} />
           <Route path="camera" element={<CameraRoute />} />
