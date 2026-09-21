@@ -2,7 +2,7 @@
 
 from gpiozero import Button
 
-GPIO = 23
+GPIO = 27
 
 reverse = Button(
     GPIO,
