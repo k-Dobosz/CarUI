@@ -14,7 +14,6 @@ export default function Navbar() {
     { icon: <RiMusic2Fill />, title: 'Music', destination: '/music' },
     { icon: <RiSettings4Fill />, title: 'Settings', destination: '/settings' },
     { icon: <RiCarFill />, title: 'Carplay', destination: '/carplay' },
-    { icon: <RiCarFill />, title: 'Camera', destination: '/camera' },
   ];
 
   return (
