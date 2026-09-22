@@ -25,7 +25,7 @@ $transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
 .main-grid {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   padding: 12px;
   background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
