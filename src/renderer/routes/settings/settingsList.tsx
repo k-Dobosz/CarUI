@@ -28,6 +28,11 @@ export default function SettingsList() {
           Carplay settings
         </Link>
       </Focusable>
+      <Focusable id="display">
+        <Link to="display" className="settings_row">
+          Display settings
+        </Link>
+      </Focusable>
       <Focusable id="system">
         <Link to="system" className="settings_row">
           System settings

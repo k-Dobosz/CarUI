@@ -5,9 +5,10 @@ import { useFocus } from './focusContext';
 interface FocusableProps {
   id: string;
   children: React.ReactElement;
+  scope?: string;
 }
 
-export default function Focusable({ id, children }: FocusableProps) {
+export default function Focusable({id, children, scope}: FocusableProps) {
   const ref = useRef<HTMLElement>(null);
   const { register, unregister } = useFocus();
 
@@ -15,12 +16,13 @@ export default function Focusable({ id, children }: FocusableProps) {
     register({
       id,
       ref,
+      scope
     });
 
     return () => {
       unregister(id);
     };
-  }, [id, register, unregister]);
+  }, [id, register, unregister, scope]);
 
   return cloneElement(children, {
     ref,

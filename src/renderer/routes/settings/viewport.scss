@@ -1,0 +1,248 @@
+.viewport_settings {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Back */
+.settings_back {
+  min-height: 56px;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.65);
+  background: transparent;
+  border: 0;
+  border-radius: 12px;
+}
+
+.settings_back:hover,
+.settings_back:focus-visible {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.settings_back_icon {
+  font-size: 1.5rem;
+}
+
+/* Header */
+.settings_header {
+  padding: 0.75rem 0.5rem;
+}
+
+.settings_header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.settings_header p {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+/* Controls */
+.viewport_controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.viewport_control {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+
+.viewport_control_info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.viewport_control_label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.viewport_control_value {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+.viewport_control_buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.viewport_button {
+  min-width: 48px;
+  height: 40px;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.07);
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.viewport_button:hover,
+.viewport_button:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.viewport_button:active {
+  transform: scale(0.96);
+}
+
+.viewport_value {
+  min-width: 48px;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sections */
+.viewport_section {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+
+.viewport_section_header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.viewport_section_header > span:first-child {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.viewport_section_description {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+/* Background options */
+.viewport_background_options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.viewport_option {
+  min-height: 56px;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.04);
+  border: 0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.viewport_option:hover,
+.viewport_option:focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.viewport_option.is_selected {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.viewport_option_preview {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.viewport_option_preview_black {
+  background: #000;
+}
+
+.viewport_option_preview_transparent {
+  background:
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.15) 75%
+    ),
+    linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 75%,
+      rgba(255, 255, 255, 0.15) 75%
+    );
+  background-position: 0 0, 6px 6px;
+  background-size: 12px 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.viewport_option_check {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  font-size: 0.7rem;
+}
+
+/* Reset */
+.viewport_reset {
+  min-height: 48px;
+  padding: 0 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.03);
+  border: 0;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.viewport_reset:hover,
+.viewport_reset:focus-visible {
+  color: white;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.viewport_reset:active {
+  transform: scale(0.98);
+}

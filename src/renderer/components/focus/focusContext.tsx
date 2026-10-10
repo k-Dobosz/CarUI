@@ -11,6 +11,7 @@ interface FocusItem {
   ref: React.RefObject<HTMLElement>;
   row?: number;
   col?: number;
+  scope?: string;
 }
 
 interface FocusContextType {
@@ -72,7 +73,11 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
     }
 
     const currentPos = getCenter(currentElement);
-    const candidates = items.filter((_, index) => index !== current);
+    const candidates = items.filter(
+      (item, index) =>
+        index !== current &&
+        item.scope === items[current].scope,
+    );
 
     let best = null as {
       index: number;
