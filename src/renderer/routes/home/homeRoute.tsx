@@ -21,7 +21,7 @@ export default function HomeRoute() {
     };
   }, [navigate]);
   return (
-    <main>
+    <main className='home-page'>
       <Clock className="home-clock" />
       <Navbar />
     </main>

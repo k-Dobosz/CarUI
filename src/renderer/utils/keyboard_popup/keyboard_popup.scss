@@ -1,67 +1,121 @@
+$keyboard-bg: #000;
+$keyboard-input-bg: #111;
+$keyboard-text: #fff;
+$keyboard-border: #555;
+$keyboard-blue: #007aff;
+$keyboard-active: #1c4995;
+$keyboard-transition: 200ms ease;
+
 .keyboard_popup {
-  position: absolute;
+  position: fixed;
+  z-index: 1000;
+  right: 0;
   bottom: 0;
+  left: 0;
   width: 100%;
+  box-sizing: border-box;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  pointer-events: none;
+  transition: opacity $keyboard-transition;
 
   &.visible {
     visibility: visible;
     opacity: 1;
+    pointer-events: auto;
   }
 
   .input_container {
     display: flex;
     width: 100%;
-    background: rgba(0, 0, 0, 0.85);
+    box-sizing: border-box;
+    background: rgba($keyboard-bg, 0.95);
+
+    input {
+      flex: 1;
+      min-width: 0;
+      padding: 1rem;
+      color: $keyboard-text;
+      font-size: 1.2rem;
+      background: $keyboard-input-bg;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      flex: 0 0 20%;
+      min-height: 56px;
+      color: $keyboard-text;
+      font-size: 1rem;
+      background: $keyboard-bg;
+      border: none;
+
+      &:focus-visible,
+      &:active {
+        background: $keyboard-active;
+        outline: 2px solid $keyboard-blue;
+        outline-offset: -2px;
+      }
+    }
   }
 
-  input {
-    flex: 1;
-    padding: 1rem;
-    font-size: 1.2rem;
-    color: white;
-    background: #111;
-    border: none;
-    outline: none;
-  }
+  .simple-keyboard.dark-theme {
+    background: $keyboard-bg;
+    border-radius: 0;
 
-  button {
-    width: 20%;
-    border: none;
-    color: white;
-    background: #000;
-    font-size: 1rem;
+    .hg-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      height: 60px;
+      color: $keyboard-text;
+      background: $keyboard-bg;
+      border-bottom: 1px solid $keyboard-border;
+      border-radius: 4px;
+      transition:
+        background-color 100ms ease,
+        box-shadow 100ms ease;
 
-    &:active {
-      background: #1c4995;
+      &:active {
+        background: $keyboard-active;
+      }
+
+      &.keyboard-focused {
+        position: relative;
+        z-index: 1;
+        color: $keyboard-text !important;
+        background: $keyboard-blue !important;
+        outline: 2px solid $keyboard-text;
+        outline-offset: -3px;
+        box-shadow: 0 0 12px rgba($keyboard-blue, 0.6);
+        transform: none;
+      }
     }
   }
 }
 
-.simple-keyboard.dark-theme {
-  background: #000;
-  border-radius: 0;
+.carplay_settings_rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-  .hg-button {
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #000;
-    color: white;
-    border-bottom: 1px solid #555;
+.carplay_setting_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
 
-    &:active {
-      background: #1c4995;
-    }
-
-    &.keyboard-focused {
-      background: #007aff !important;
-      color: white !important;
-      transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(0, 122, 255, 0.7);
-    }
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
   }
+}
+
+.carplay_setting_value {
+  margin-left: 1rem;
+  color: rgba(255, 255, 255, 0.7);
 }

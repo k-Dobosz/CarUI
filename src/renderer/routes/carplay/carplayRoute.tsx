@@ -4,6 +4,7 @@ import { Carplay, CarplayAudio } from 'react-js-carplay';
 import io from 'socket.io-client';
 import Topbar from 'renderer/components/topbar/topbar';
 import Navbar from '../../components/navbar/navbar';
+import './carplay.scss';
 
 const socket = io('ws://localhost:5005');
 
@@ -39,7 +40,7 @@ export default function CarplayRoute() {
   }, [navigate]);
 
   return (
-    <>
+    <div className="carplay_page">
       {visibility ? <Topbar /> : ''}
       <Carplay
         settings={{
@@ -52,9 +53,8 @@ export default function CarplayRoute() {
           fps: 60,
         }}
         touchEvent={touchHandler}
-        style={{ height: visibility ? 'calc(100% - 23.5vh)' : '' }}
       />
       {visibility ? <Navbar /> : ''}
-    </>
+    </div>
   );
 }

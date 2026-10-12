@@ -1,0 +1,56 @@
+.carplay_page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+
+  .topbar {
+    flex: 0 0 6vh;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  #main {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 0;
+    height: auto !important;
+    overflow: hidden;
+  }
+
+  #player {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: black;
+  }
+
+  .App > div {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .navbar {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    flex: 0 0 auto;
+    transform: none;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 12px 20px 20px;
+    z-index: 100;
+  }
+}
