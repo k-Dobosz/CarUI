@@ -8,37 +8,71 @@
   overflow: hidden;
 
   .topbar {
+    position: relative;
     flex: 0 0 6vh;
     width: 100%;
     box-sizing: border-box;
   }
 
-  #main {
+  .carplay-container {
     position: relative;
     flex: 1 1 0;
+    width: 100%;
     min-height: 0;
-    height: auto !important;
     overflow: hidden;
-  }
 
-  #player {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: black;
-  }
+    #main {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100% !important;
+      min-height: 0;
+      overflow: hidden;
+    }
 
-  .App > div {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    pointer-events: none;
+    .App {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+
+      .loading {
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        display: grid;
+        place-items: center;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        pointer-events: none;
+
+        &::after {
+          content: '';
+          display: block;
+          width: 100px;
+          height: 100px;
+          box-sizing: border-box;
+          border: 5px solid #fff;
+          border-right-color: transparent;
+          border-radius: 50%;
+          animation: carplay-spinner-rotate 0.8s linear infinite;
+        }
+      }
+    }
+
+    #player {
+      position: absolute !important;
+      inset: 0 !important;
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: black;
+    }
   }
 
   .navbar {
@@ -46,11 +80,17 @@
     left: auto;
     bottom: auto;
     flex: 0 0 auto;
-    transform: none;
     width: 100%;
     box-sizing: border-box;
     margin: 0;
     padding: 12px 20px 20px;
+    transform: none;
     z-index: 100;
+  }
+}
+
+@keyframes carplay-spinner-rotate {
+  to {
+    transform: rotate(360deg);
   }
 }
