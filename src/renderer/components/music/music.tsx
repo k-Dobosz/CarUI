@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import jsmediatags from 'jsmediatags';
 import Visualization from './visualization';
 import song from './audio.mp3';
+import Focusable from '../focus/focusable';
 
 type CurrentSongType = {
   title: string;
@@ -121,30 +122,41 @@ export default function Music() {
             }
           />
           <Visualization audioRef={audioRef} />
+          <section id="music-control">
+            <Focusable id="music-list" scope="music-controls">
+              <button type="button">music list</button>
+            </Focusable>
+            <Focusable id="music-previous" scope="music-controls">
+              <button
+                type="button"
+                onClick={() => {
+                  ipcRenderer.sendMessage('carplay-sendkey', [{ key: 'prev' }]);
+                }}
+              >
+                <RiSkipBackFill size="3em" />
+              </button>
+            </Focusable>
+            
+            <Focusable id="music-playpause" scope="music-controls">
+              <button type="button" id="playpause" onClick={playPauseHandler}>
+                {isPlaying ? <RiPauseFill size="3em" /> : <RiPlayFill size="3em" />}
+              </button>
+            </Focusable>
+            <Focusable id="music-next" scope="music-controls">
+              <button
+                type="button"
+                onClick={() => {
+                  ipcRenderer.sendMessage('carplay-sendkey', [{ key: 'next' }]);
+                }}
+              >
+                <RiSkipForwardFill size="3em" />
+              </button>
+            </Focusable>
+            <Focusable id="music-repeat" scope="music-controls">
+              <button type="button">repeat</button>
+            </Focusable>
+          </section>
         </section>
-      </section>
-      <section id="music-control">
-        <button type="button">music list</button>
-        <button
-          type="button"
-          onClick={() => {
-            ipcRenderer.sendMessage('carplay-sendkey', [{ key: 'prev' }]);
-          }}
-        >
-          <RiSkipBackFill size="3em" />
-        </button>
-        <button type="button" id="playpause" onClick={playPauseHandler}>
-          {isPlaying ? <RiPauseFill size="3em" /> : <RiPlayFill size="3em" />}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            ipcRenderer.sendMessage('carplay-sendkey', [{ key: 'next' }]);
-          }}
-        >
-          <RiSkipForwardFill size="3em" />
-        </button>
-        <button type="button">repeat</button>
       </section>
     </div>
   );

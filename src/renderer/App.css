@@ -2,14 +2,22 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
- @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap');
 * {
   margin: 0;
   padding: 0;
   font-family: 'Barlow', sans-serif;
 }
 
- body {
+:root {
+  --ui-scale: 1;
+}
+
+html {
+  font-size: calc(16px * var(--ui-scale));
+}
+
+body {
   position: relative;
   color: white;
   height: 100vh;

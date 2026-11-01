@@ -1,4 +1,3 @@
-
 import {
   HTMLInputTypeAttribute,
   useCallback,
@@ -31,14 +30,21 @@ export default function KeyboardPopup({
   const [input, setInput] = useState('');
   const [layout, setLayout] = useState<'default' | 'shift'>('default');
   const [focusIndex, setFocusIndex] = useState(0);
+
   const popupRef = useRef<HTMLDivElement>(null);
 
   const getButtons = useCallback(() => {
     if (!popupRef.current) return [];
 
-    return Array.from(
+    const cancelButton = popupRef.current.querySelector<HTMLButtonElement>(
+      '.input_container button',
+    );
+
+    const keyboardButtons = Array.from(
       popupRef.current.querySelectorAll<HTMLButtonElement>('.hg-button'),
     );
+
+    return [...(cancelButton ? [cancelButton] : []), ...keyboardButtons];
   }, []);
 
   useEffect(() => {
@@ -70,7 +76,6 @@ export default function KeyboardPopup({
           break;
 
         default:
-          // Ignore other special-key tokens.
           if (key.startsWith('{') && key.endsWith('}')) return;
           setInput((value) => value + key);
           break;
@@ -79,14 +84,17 @@ export default function KeyboardPopup({
     [input, onSubmit],
   );
 
+  // Apply focus to Cancel or the selected keyboard key.
   useEffect(() => {
     if (!visible) return;
 
     const buttons = getButtons();
 
     buttons.forEach((button, index) => {
-      button.classList.toggle('keyboard-focused', index === focusIndex);
-      button.tabIndex = index === focusIndex ? 0 : -1;
+      const focused = index === focusIndex;
+
+      button.classList.toggle('keyboard-focused', focused);
+      button.tabIndex = focused ? 0 : -1;
     });
 
     buttons[focusIndex]?.focus({ preventScroll: true });
@@ -116,16 +124,30 @@ export default function KeyboardPopup({
       }
 
       const buttons = getButtons();
+
       if (!buttons.length) return;
 
       const currentIndex = Math.min(focusIndex, buttons.length - 1);
 
+      const currentButton = buttons[currentIndex];
+
+      // Activate Cancel or the selected keyboard key.
       if (event.key === 'Enter') {
-        const key = buttons[currentIndex]?.dataset.skbtn;
-        if (key) pressKey(key);
+        if (currentIndex === 0) {
+          onCancel();
+          return;
+        }
+
+        const key = currentButton?.dataset.skbtn;
+
+        if (key) {
+          pressKey(key);
+        }
+
         return;
       }
 
+      // Horizontal navigation.
       if (event.key === 'ArrowLeft') {
         setFocusIndex(Math.max(0, currentIndex - 1));
         return;
@@ -136,11 +158,12 @@ export default function KeyboardPopup({
         return;
       }
 
-      // Group buttons into their actual visual rows.
+      // Vertical navigation based on actual visual rows.
       const rows: HTMLButtonElement[][] = [];
 
       buttons.forEach((button) => {
         const top = button.offsetTop;
+
         let row = rows.find((items) => items[0]?.offsetTop === top);
 
         if (!row) {
@@ -151,13 +174,14 @@ export default function KeyboardPopup({
         row.push(button);
       });
 
-      const rowIndex = rows.findIndex((row) => row.includes(buttons[currentIndex]));
-      const currentButton = buttons[currentIndex];
+      const rowIndex = rows.findIndex((row) => row.includes(currentButton));
+
       const currentCenter =
         currentButton.offsetLeft + currentButton.offsetWidth / 2;
 
       const targetRowIndex =
         event.key === 'ArrowDown' ? rowIndex + 1 : rowIndex - 1;
+
       const targetRow = rows[targetRowIndex];
 
       if (!targetRow?.length) return;
@@ -167,6 +191,7 @@ export default function KeyboardPopup({
 
       targetRow.forEach((button) => {
         const center = button.offsetLeft + button.offsetWidth / 2;
+
         const distance = Math.abs(center - currentCenter);
 
         if (distance < nearestDistance) {

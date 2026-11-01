@@ -26,6 +26,7 @@ export default function Navbar() {
         {items.map((item) => (
           <Focusable
             id={`navbar-${item.title.toLowerCase()}`}
+            scope='navbar'
           >
             <Link
               to={item.destination}

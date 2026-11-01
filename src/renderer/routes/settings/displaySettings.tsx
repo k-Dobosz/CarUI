@@ -10,13 +10,16 @@ export default function DisplaySettings() {
           Back
         </Link>
       </Focusable>
-
       <Focusable id="viewport">
         <Link to="viewport" className="settings_row">
           Viewport
         </Link>
       </Focusable>
-      
+      <Focusable id="ui-scale">
+        <Link to="ui-scale" className="settings_row">
+          UI Scale
+        </Link>
+      </Focusable>
     </>
   );
 }

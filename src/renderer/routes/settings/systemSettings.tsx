@@ -21,6 +21,12 @@ export default function SystemSettings() {
         </Link>
       </Focusable>
 
+      <Focusable id="time">
+        <Link to="time" className="settings_row">
+          Time settings
+        </Link>
+      </Focusable>
+
       <Focusable id="about">
         <Link to="about" className="settings_row">
           About CarUI

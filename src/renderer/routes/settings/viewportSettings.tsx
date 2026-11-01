@@ -2,13 +2,9 @@ import { Link } from 'react-router-dom';
 
 import Focusable from '../../components/focus/focusable';
 import { useDashboard } from '../../components/dashboard/dashboardProvider';
-import './viewport.scss'
+import './viewport.scss';
 
-type SafeAreaSide =
-  | 'top'
-  | 'right'
-  | 'bottom'
-  | 'left';
+type SafeAreaSide = 'top' | 'right' | 'bottom' | 'left';
 
 const SIDES: {
   key: SafeAreaSide;
@@ -33,113 +29,73 @@ const SIDES: {
 ];
 
 export default function ViewportSettings() {
-  const {
-    safeArea,
-    changeSide,
-    setBackground,
-    resetSafeArea,
-  } = useDashboard();
+  const { safeArea, changeSide, setBackground, resetSafeArea } = useDashboard();
 
   return (
     <div className="viewport_settings">
       <Focusable id="back">
-        <Link
-          to="/settings/display"
-          className="settings_row settings_back"
-        >
-          <span className="settings_back_icon">
-            ‹
-          </span>
-
-          <span>Display</span>
+        <Link to="/settings/display" className="settings_row">
+          Back
         </Link>
       </Focusable>
 
       <div className="settings_header">
         <h1>Viewport</h1>
 
-        <p>
-          Adjust the usable display area to match
-          the physical dashboard.
-        </p>
+        <p>Adjust the usable display area to match the physical dashboard.</p>
       </div>
 
       <div className="viewport_controls">
         {SIDES.map(({ key, label }) => (
-          <div
-            key={key}
-            className="viewport_control"
-          >
+          <div key={key} className="viewport_control">
             <div className="viewport_control_info">
-              <span className="viewport_control_label">
-                {label}
-              </span>
+              <span className="viewport_control_label">{label}</span>
 
-              <span className="viewport_control_value">
-                {safeArea[key]} px
-              </span>
+              <span className="viewport_control_value">{safeArea[key]} px</span>
             </div>
 
             <div className="viewport_control_buttons">
-              <Focusable
-                id={`${key}-minus-10`}
-              >
+              <Focusable id={`${key}-minus-10`}>
                 <button
                   type="button"
                   className="viewport_button"
                   aria-label={`${label}, decrease by 10 pixels`}
-                  onClick={() =>
-                    changeSide(key, -10)
-                  }
+                  onClick={() => changeSide(key, -10)}
                 >
                   −10
                 </button>
               </Focusable>
 
-              <Focusable
-                id={`${key}-minus-1`}
-              >
+              <Focusable id={`${key}-minus-1`}>
                 <button
                   type="button"
                   className="viewport_button"
                   aria-label={`${label}, decrease by 1 pixel`}
-                  onClick={() =>
-                    changeSide(key, -1)
-                  }
+                  onClick={() => changeSide(key, -1)}
                 >
                   −1
                 </button>
               </Focusable>
 
-              <div className="viewport_value">
-                {safeArea[key]}
-              </div>
+              <div className="viewport_value">{safeArea[key]}</div>
 
-              <Focusable
-                id={`${key}-plus-1`}
-              >
+              <Focusable id={`${key}-plus-1`}>
                 <button
                   type="button"
                   className="viewport_button"
                   aria-label={`${label}, increase by 1 pixel`}
-                  onClick={() =>
-                    changeSide(key, 1)
-                  }
+                  onClick={() => changeSide(key, 1)}
                 >
                   +1
                 </button>
               </Focusable>
 
-              <Focusable
-                id={`${key}-plus-10`}
-              >
+              <Focusable id={`${key}-plus-10`}>
                 <button
                   type="button"
                   className="viewport_button"
                   aria-label={`${label}, increase by 10 pixels`}
-                  onClick={() =>
-                    changeSide(key, 10)
-                  }
+                  onClick={() => changeSide(key, 10)}
                 >
                   +10
                 </button>
@@ -159,60 +115,38 @@ export default function ViewportSettings() {
         </div>
 
         <div className="viewport_background_options">
-          <Focusable id="background-black">
+          <Focusable id="background-black" scope="background-options">
             <button
               type="button"
               className={`viewport_option ${
-                safeArea.background === 'black'
-                  ? 'is_selected'
-                  : ''
+                safeArea.background === 'black' ? 'is_selected' : ''
               }`}
-              onClick={() =>
-                setBackground('black')
-              }
-              aria-pressed={
-                safeArea.background === 'black'
-              }
+              onClick={() => setBackground('black')}
+              aria-pressed={safeArea.background === 'black'}
             >
               <span className="viewport_option_preview viewport_option_preview_black" />
-
               <span>Black</span>
 
-              {safeArea.background ===
-                'black' && (
-                <span className="viewport_option_check">
-                  ✓
-                </span>
+              {safeArea.background === 'black' && (
+                <span className="viewport_option_check">✓</span>
               )}
             </button>
           </Focusable>
 
-          <Focusable id="background-transparent">
+          <Focusable id="background-transparent" scope="background-options">
             <button
               type="button"
               className={`viewport_option ${
-                safeArea.background ===
-                'transparent'
-                  ? 'is_selected'
-                  : ''
+                safeArea.background === 'transparent' ? 'is_selected' : ''
               }`}
-              onClick={() =>
-                setBackground('transparent')
-              }
-              aria-pressed={
-                safeArea.background ===
-                'transparent'
-              }
+              onClick={() => setBackground('transparent')}
+              aria-pressed={safeArea.background === 'transparent'}
             >
               <span className="viewport_option_preview viewport_option_preview_transparent" />
-
               <span>Transparent</span>
 
-              {safeArea.background ===
-                'transparent' && (
-                <span className="viewport_option_check">
-                  ✓
-                </span>
+              {safeArea.background === 'transparent' && (
+                <span className="viewport_option_check">✓</span>
               )}
             </button>
           </Focusable>

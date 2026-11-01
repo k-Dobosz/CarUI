@@ -35,7 +35,7 @@ export default function CarplayRoute() {
   const locationState = location.state as CarplayLocationState | null;
 
   const [visibility, setVisibility] = useState(
-    locationState?.visibility ?? true
+    locationState?.visibility ?? true,
   );
   const [ready, setReady] = useState(false);
   const [carplayKey, setCarplayKey] = useState(0);
@@ -58,6 +58,70 @@ export default function CarplayRoute() {
       socket.off('quit', handleQuit);
     };
   }, [navigate]);
+
+  useEffect(() => {
+    const keys: Record<string, string> = {
+      ArrowUp: 'back',
+      ArrowDown: 'down',
+      ArrowLeft: 'left',
+      ArrowRight: 'right',
+      ' ': 'selectDown',
+      n: 'next',
+      m: 'siri',
+      v: 'prev',
+      h: 'home',
+      q: 'wifi',
+      w: 'wifiOk',
+      e: 'auto',
+    };
+
+    let selectTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const sendKey = (key: string) => {
+      const { ipcRenderer } = window.electron;
+      ipcRenderer.sendMessage('carplay-sendkey', [{ key }]);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const pressedKey =
+        event.key.length === 1 ? event.key.toLowerCase() : event.key;
+
+      const key = keys[pressedKey];
+
+      if (!key) return;
+
+      // Ignore OS/browser key-repeat events.
+      if (event.repeat) {
+        event.preventDefault();
+        return;
+      }
+
+      event.preventDefault();
+
+      console.log(`[CarPlay] Keyboard: ${event.key} -> ${key}`);
+      sendKey(key);
+
+      if (key === 'selectDown') {
+        if (selectTimer) clearTimeout(selectTimer);
+
+        selectTimer = setTimeout(() => {
+          sendKey('selectUp');
+          selectTimer = undefined;
+        }, 200);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+
+      if (selectTimer) {
+        clearTimeout(selectTimer);
+        sendKey('selectUp');
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let firstFrame = 0;
@@ -83,12 +147,7 @@ export default function CarplayRoute() {
       {visibility && <Topbar />}
 
       <div className="carplay-container">
-        {ready && (
-          <Carplay
-            key={carplayKey}
-            settings={CARPLAY_SETTINGS}
-          />
-        )}
+        {ready && <Carplay key={carplayKey} settings={CARPLAY_SETTINGS} />}
       </div>
 
       {visibility && <Navbar />}

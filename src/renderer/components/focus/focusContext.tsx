@@ -18,6 +18,7 @@ interface FocusContextType {
   register: (item: FocusItem) => void;
   unregister: (id: string) => void;
   setFocus: (id: string) => void;
+  switchScope: (direction: 'next' | 'previous') => void;
 }
 
 const FocusContext = createContext<FocusContextType | null>(null);
@@ -40,7 +41,6 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
 
   const unregister = useCallback((id: string) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
-    setCurrent(0);
   }, []);
 
   const setFocus = useCallback(
@@ -49,7 +49,6 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
 
       if (index !== -1) {
         setCurrent(index);
-
         items[index].ref.current?.focus();
       }
     },
@@ -66,76 +65,125 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
   };
 
   const findNext = (direction: 'up' | 'down' | 'left' | 'right') => {
-    const currentElement = items[current]?.ref.current;
+    const currentItem = items[current];
+    const currentElement = currentItem?.ref.current;
 
-    if (!currentElement) {
-      return current;
-    }
+    if (!currentElement) return current;
 
     const currentPos = getCenter(currentElement);
-    const candidates = items.filter(
-      (item, index) =>
-        index !== current &&
-        item.scope === items[current].scope,
-    );
 
-    let best = null as {
-      index: number;
-      distance: number;
-    } | null;
+    const findCandidate = (sameScope: boolean) => {
+      const candidates = items
+        .map((item, index) => ({ item, index }))
+        .filter(({ item, index }) => {
+          if (index === current || !item.ref.current) {
+            return false;
+          }
 
-    for (let i = 0; i < candidates.length; i++) {
-      const element = candidates[i].ref.current;
+          return sameScope
+            ? item.scope === currentItem.scope
+            : item.scope !== currentItem.scope;
+        });
 
-      if (!element) {
-        continue;
+      let best: { index: number; distance: number } | null = null;
+
+      for (const candidate of candidates) {
+        const element = candidate.item.ref.current;
+
+        if (!element) continue;
+
+        const pos = getCenter(element);
+        const dx = pos.x - currentPos.x;
+        const dy = pos.y - currentPos.y;
+
+        let valid = false;
+        let primaryDistance = 0;
+        let secondaryDistance = 0;
+
+        switch (direction) {
+          case 'up':
+            valid = dy < -10;
+            primaryDistance = Math.abs(dy);
+            secondaryDistance = Math.abs(dx);
+            break;
+
+          case 'down':
+            valid = dy > 10;
+            primaryDistance = Math.abs(dy);
+            secondaryDistance = Math.abs(dx);
+            break;
+
+          case 'left':
+            valid = dx < -10;
+            primaryDistance = Math.abs(dx);
+            secondaryDistance = Math.abs(dy);
+            break;
+
+          case 'right':
+            valid = dx > 10;
+            primaryDistance = Math.abs(dx);
+            secondaryDistance = Math.abs(dy);
+            break;
+        }
+
+        if (!valid) continue;
+
+        // Prefer candidates aligned with the current item.
+        const distance = primaryDistance + secondaryDistance * 2;
+
+        if (!best || distance < best.distance) {
+          best = {
+            index: candidate.index,
+            distance,
+          };
+        }
       }
 
-      const pos = getCenter(element);
-      const dx = pos.x - currentPos.x;
-      const dy = pos.y - currentPos.y;
-      let valid = false;
+      return best?.index ?? null;
+    };
 
-      switch (direction) {
-        case 'up':
-          valid = dy < -10;
-          break;
+    // First search within the current scope.
+    const sameScopeResult = findCandidate(true);
 
-        case 'down':
-          valid = dy > 10;
-          break;
-
-        case 'left':
-          valid = dx < -10;
-          break;
-
-        case 'right':
-          valid = dx > 10;
-          break;
-      }
-
-      if (!valid) {
-        continue;
-      }
-
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (!best || distance < best.distance) {
-        best = {
-          index: i,
-          distance,
-        };
-      }
+    if (sameScopeResult !== null) {
+      return sameScopeResult;
     }
 
-    return best ? items.indexOf(candidates[best.index]) : current;
+    // If no item exists in that direction, search other scopes.
+    const otherScopeResult = findCandidate(false);
+
+    return otherScopeResult ?? current;
   };
+
+  const switchScope = useCallback(
+    (direction: 'next' | 'previous') => {
+      const scopes = [...new Set(items.map((item) => item.scope))];
+
+      const currentScope = items[current]?.scope;
+      const currentScopeIndex = scopes.indexOf(currentScope);
+
+      if (currentScopeIndex === -1 || scopes.length < 2) return;
+
+      const nextScopeIndex =
+        direction === 'next'
+          ? (currentScopeIndex + 1) % scopes.length
+          : (currentScopeIndex - 1 + scopes.length) % scopes.length;
+
+      const nextScope = scopes[nextScopeIndex];
+
+      const target = items.findIndex((item) => item.scope === nextScope);
+
+      if (target !== -1) {
+        setCurrent(target);
+        items[target].ref.current?.focus();
+      }
+    },
+    [items, current],
+  );
 
   useEffect(() => {
     const handler = (event: KeyboardEvent) => {
-      if (!items.length) {
-        return;
-      }
+      if (!items.length) return;
 
       let next = current;
 
@@ -156,10 +204,14 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
           next = findNext('right');
           break;
 
+        case 'Tab':
+          return;
+
         case 'Enter':
         case ' ':
-          items[current]?.ref.current?.click();
-
+          if (document.activeElement === items[current]?.ref.current) {
+            items[current]?.ref.current?.click();
+          }
           return;
 
         default:
@@ -167,9 +219,11 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
       }
 
       event.preventDefault();
-      setCurrent(next);
 
-      items[next]?.ref.current?.focus();
+      if (next !== current) {
+        setCurrent(next);
+        items[next]?.ref.current?.focus();
+      }
     };
 
     window.addEventListener('keydown', handler);
@@ -189,6 +243,7 @@ export function FocusProvider({ children }: { children: React.ReactNode }) {
         register,
         unregister,
         setFocus,
+        switchScope,
       }}
     >
       {children}

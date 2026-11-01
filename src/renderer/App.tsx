@@ -6,7 +6,7 @@ import CarplayRoute from './routes/carplay/carplayRoute';
 import NetflixRoute from './routes/netflixRoute';
 import YoutubeRoute from './routes/youtubeRoute';
 import SettingsRoute from './routes/settings/settingsRoute';
-import MusicRoute from './routes/musicRoute';
+import MusicRoute from './routes/music/musicRoute';
 import WifiSettings from './routes/settings/wifiSettings';
 import SettingsList from './routes/settings/settingsList';
 import CustomizationSettings from './routes/settings/customizationSettings';
@@ -21,6 +21,8 @@ import ReverseCameraController from './components/camera/cameraController';
 import DisplaySettings from './routes/settings/displaySettings';
 import ViewportSettings from './routes/settings/viewportSettings';
 import { DashboardProvider } from './components/dashboard/dashboardProvider';
+import TimeSettings from './routes/settings/timeSettings';
+import UIScaleSettings from './routes/settings/uiScaleSettings';
 
 export default function App() {
   const { ipcRenderer } = window.electron;
@@ -30,12 +32,14 @@ export default function App() {
       `url('${wallpaperUrl}')`;
   };
 
-
   useEffect(() => {
     const loadWallpaper = async () => {
       try {
-        const path = await ipcRenderer.invoke('get-public-path') as string;
-        const wallpaper = await ipcRenderer.invoke('store-get', 'settings.customization.wallpaperUrl') as string;
+        const path = (await ipcRenderer.invoke('get-public-path')) as string;
+        const wallpaper = (await ipcRenderer.invoke(
+          'store-get',
+          'settings.customization.wallpaperUrl',
+        )) as string;
 
         changeBg(path + wallpaper);
       } catch (error) {
@@ -44,6 +48,50 @@ export default function App() {
     };
 
     loadWallpaper();
+  }, [ipcRenderer]);
+
+  // Load and apply saved UI scale.
+  useEffect(() => {
+    const applyScale = (scale: number) => {
+      document.documentElement.style.setProperty(
+        '--ui-scale',
+        String(scale / 100),
+      );
+    };
+
+    const loadScale = async () => {
+      try {
+        const savedScale = (await ipcRenderer.invoke(
+          'store-get',
+          'settings.uiScale',
+        )) as number | undefined;
+
+        const scale =
+          typeof savedScale === 'number' && Number.isFinite(savedScale)
+            ? Math.min(150, Math.max(75, savedScale))
+            : 100;
+
+        applyScale(scale);
+      } catch (error) {
+        console.error('Failed to load UI scale:', error);
+        applyScale(100);
+      }
+    };
+
+    const handleScaleChange = (event: Event) => {
+      const scale = (event as CustomEvent<number>).detail;
+
+      if (typeof scale === 'number' && Number.isFinite(scale)) {
+        applyScale(Math.min(150, Math.max(75, scale)));
+      }
+    };
+
+    window.addEventListener('ui-scale-change', handleScaleChange);
+    loadScale();
+
+    return () => {
+      window.removeEventListener('ui-scale-change', handleScaleChange);
+    };
   }, [ipcRenderer]);
 
   return (
@@ -62,11 +110,16 @@ export default function App() {
               <Route index element={<SettingsList />} />
               <Route path="wifi" element={<WifiSettings />} />
               <Route path="customization" element={<CustomizationSettings />} />
-              <Route path="customization/wallpaper" element={<CustomizationWallpaper />} />
+              <Route
+                path="customization/wallpaper"
+                element={<CustomizationWallpaper />}
+              />
               <Route path="carplay" element={<CarplaySettings />} />
               <Route path="display" element={<DisplaySettings />} />
               <Route path="display/viewport" element={<ViewportSettings />} />
+              <Route path="display/ui-scale" element={<UIScaleSettings />} />
               <Route path="system" element={<SystemSettings />} />
+              <Route path="system/time" element={<TimeSettings />} />
               <Route path="system/about" element={<SystemAboutSettings />} />
             </Route>
           </Routes>

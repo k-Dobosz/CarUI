@@ -1,0 +1,180 @@
+.ui_scale_settings {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settings_header {
+  padding: 0.75rem 0.5rem;
+}
+
+.settings_header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.settings_header p {
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+}
+
+.ui_scale_controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ui_scale_control {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+
+.ui_scale_control_info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.ui_scale_control_label {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.ui_scale_control_value {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+.ui_scale_control_buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ui_scale_button {
+  min-width: 48px;
+  height: 40px;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.07);
+  border: 0;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.ui_scale_button:hover,
+.ui_scale_button:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ui_scale_button:active {
+  transform: scale(0.96);
+}
+
+.ui_scale_button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ui_scale_value {
+  min-width: 56px;
+  text-align: center;
+  color: white;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Presets */
+.ui_scale_section {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+
+.ui_scale_section_header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 0.75rem;
+}
+
+.ui_scale_section_header > span:first-child {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.ui_scale_section_description {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+.ui_scale_presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.ui_scale_option {
+  min-height: 52px;
+  padding: 0 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.04);
+  border: 0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.ui_scale_option:hover,
+.ui_scale_option:focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.ui_scale_option.is_selected {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Reset */
+.ui_scale_reset {
+  min-height: 48px;
+  padding: 0 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.03);
+  border: 0;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.ui_scale_reset:hover,
+.ui_scale_reset:focus-visible {
+  color: white;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.ui_scale_reset:active {
+  transform: scale(0.98);
+}

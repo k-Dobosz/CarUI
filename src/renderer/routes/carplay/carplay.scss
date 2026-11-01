@@ -30,38 +30,47 @@
       overflow: hidden;
     }
 
-    .App {
-      position: relative;
+.App {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  text-align: center;
+
+  > div {
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+  }
+
+  .loading {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    pointer-events: none;
+
+    &::after {
+      content: '';
       display: block;
-      width: 100%;
-      height: 100%;
-      min-height: 0;
-      overflow: hidden;
-
-      .loading {
-        position: absolute;
-        inset: 0;
-        z-index: 10;
-        display: grid;
-        place-items: center;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
-        pointer-events: none;
-
-        &::after {
-          content: '';
-          display: block;
-          width: 100px;
-          height: 100px;
-          box-sizing: border-box;
-          border: 5px solid #fff;
-          border-right-color: transparent;
-          border-radius: 50%;
-          animation: carplay-spinner-rotate 0.8s linear infinite;
-        }
-      }
+      width: 100px;
+      height: 100px;
+      box-sizing: border-box;
+      border: 5px solid #fff;
+      border-right-color: transparent;
+      border-radius: 50%;
+      animation: carplay-spinner-rotate 0.8s linear infinite;
     }
+  }
+}
 
     #player {
       position: absolute !important;
